@@ -957,6 +957,9 @@ function buildPhraseEvents(){holdEvents=[];cutEvents=[];const add=(end,len)=>{ho
   SEASON.holds.forEach(([e,l])=>add(e,l));add(CUT,3)}
 function buildDynEvents(){dynEvents=[];const total=TOTAL_BARS*BPB;let prev=null;
   for(let b=0;b<total-2;b+=4){const v=(dynTarget(b)+dynTarget(b+1)+dynTarget(b+2))/3;if(prev!=null&&Math.abs(v-prev)>.15)dynEvents.push({b,dir:Math.sign(v-prev),v,done:false});prev=v}}
+/* what the left-hand meter asks for: the music's loudness, except while a rehearsal lesson is paused on a left-hand move,
+   when it shows the height that lesson's card points at (same LC scale as drawRehGuide) */
+function meterTarget(b){const st=REH.on&&REH.pause&&REH_STEPS[REH.si],h=st?{top:1,bottom:0,hold:.5,cut:.6,both:1}[st.k]:null;return h!=null?h:dynTarget(b)}
 function dynTarget(b){const ws=waveSec(b);if(ws)return .34+.2*Math.sin((b-ws.from*BPB)*Math.PI/2);return DYN[dynMark(b)]
 }
 let accState=[],gStats={accent:0,accentTot:4,hold:0,holdTot:0,cutoff:false,dynIn:0,dynTot:0,legIn:0,legTot:0};
@@ -1126,7 +1129,7 @@ function drawStand(){
   c.fillStyle='#0d0f14';c.beginPath();c.roundRect?c.roundRect(4,4,W-8,H+20,14):c.rect(4,4,W-8,H+20);c.fill();
   c.fillStyle='#232c40';c.beginPath();c.roundRect?c.roundRect(12,12,W-24,H,10):c.rect(12,12,W-24,H);c.fill();
   const total=TOTAL_BARS*BPB,bars=Math.ceil(total/4),curBar=Math.max(0,Math.min(bars,Math.floor(pos/4)+1));
-  const handFresh=camOn&&now-volAt<1500&&vol!=null,tv=dynTarget(Math.max(0,pos));
+  const handFresh=camOn&&now-volAt<1500&&vol!=null,tv=meterTarget(Math.max(0,pos)),lesson=REH.on&&REH.pause;
   /* --- top HUD: progress · tempo · loudness · accuracy --- */
   const hy=24,px=26,pw=W*.3;c.fillStyle='#16203a';c.fillRect(px,hy-6,pw,12);c.fillStyle='#3d8be0';c.fillRect(px,hy-6,pw*Math.max(0,Math.min(1,pos/total)),12);
   c.fillStyle='#e8eefb';c.font="bold 10px 'DM Mono',monospace";c.textAlign='center';c.fillText(`${curBar}/${bars}`,px+pw/2,hy+.5);
@@ -1174,7 +1177,7 @@ function drawStand(){
     c.font=`${wide?11:9}px 'Gowun Dodum'`;c.textAlign='left';c.fillStyle='#cfd8ea';c.fillText('▲크게',labX,my0+4);c.fillText('▼작게',labX,my1-2);
     /* one pair of dashed lines: keep the left hand between them; the dynamic (p, f…) sits beside it */
     {const [y0,y1]=zone(tv);c.fillStyle='#f7e9b0';c.font="italic bold 16px Georgia,serif";c.fillText(dynLabel(tv),labX,(y0+y1)/2+5);
-      if(Math.abs(nt-tv)>.08){c.fillStyle='#f7e9b0';c.font="bold 10px 'Gowun Dodum'";c.textAlign='center';c.fillText(nt>tv?'곧 ⬆':'곧 ⬇',colC,nt>tv?y0-7:y1+9);c.textAlign='left'}}
+      if(!lesson&&Math.abs(nt-tv)>.08){c.fillStyle='#f7e9b0';c.font="bold 10px 'Gowun Dodum'";c.textAlign='center';c.fillText(nt>tv?'곧 ⬆':'곧 ⬇',colC,nt>tv?y0-7:y1+9);c.textAlign='left'}}
     if(handFresh){const ok=Math.abs(vol-tv)<TOL,y=yv(vol),r=Math.max(10,Math.min(15,mw*.2));c.fillStyle=ok?'#5fd08a':'#ff6b5a';c.beginPath();c.arc(colC,y,r,0,7);c.fill();c.strokeStyle='#fff';c.lineWidth=2;c.stroke();
       c.fillStyle='#fff';c.font=`bold ${Math.round(r*1.1)}px sans-serif`;c.textAlign='center';c.fillText('✋',colC,y+1);
       if(!ok){c.fillStyle='#ff6b5a';c.font="bold 16px sans-serif";c.fillText(vol<tv?'⬆':'⬇',colC,y+(vol<tv?-r-10:r+10))}}}
