@@ -1167,15 +1167,13 @@ function drawStand(){
      two green dashed lines across the column = keep the hand between them; yellow dashed lines = where it goes next; ✋ = the hand */
   {const mx0=16,mw=MW,my0=top-6,my1=hit+6,yv=v=>my1-(my1-my0)*v,nt=dynTarget(Math.max(0,pos+2)),TOL=.18,
       colW=Math.round(mw*.36),colX=mx0+6,colC=colX+colW/2,labX=colX+colW+6,wide=mw>=58,
-      zone=v=>{const y0=yv(Math.min(1,v+TOL)),y1=yv(Math.max(0,v-TOL));c.fillStyle='#5fd08a55';c.strokeStyle='#5fd08a';c.lineWidth=2.5;c.beginPath();c.roundRect?c.roundRect(colX-4,y0,colW+8,y1-y0,6):c.rect(colX-4,y0,colW+8,y1-y0);c.fill();c.stroke();return[y0,y1]};
+      zone=v=>{const y0=yv(Math.min(1,v+TOL)),y1=yv(Math.max(0,v-TOL));c.strokeStyle='#5fd08a';c.lineWidth=3;c.setLineDash([6,4]);[y0,y1].forEach(y=>{c.beginPath();c.moveTo(colX-6,y);c.lineTo(colX+colW+6,y);c.stroke()});c.setLineDash([]);return[y0,y1]};
     c.fillStyle='#10141f';c.beginPath();c.roundRect?c.roundRect(mx0,my0-10,mw,my1-my0+20,12):c.rect(mx0,my0-10,mw,my1-my0+20);c.fill();
     const g=c.createLinearGradient(0,my1,0,my0);g.addColorStop(0,'#2a3a66');g.addColorStop(1,'#d9a13a');c.fillStyle=g;c.beginPath();c.roundRect?c.roundRect(colX,my0,colW,my1-my0,6):c.rect(colX,my0,colW,my1-my0);c.fill();
-    /* scale marks: short solid ticks on the left edge so they don't look like the dashed target lines */
-    c.font=`${wide?10:9}px 'Gowun Dodum'`;c.textAlign='left';
-    [[.9,'머리 위','크게'],[.5,'가슴','중간'],[.1,'배','작게']].forEach(([v,a,b])=>{const y=yv(v);c.fillStyle='#cfd8ea';c.fillRect(colX-4,y-1,6,2);
-      if(wide){c.fillText(a,labX,y-5);c.fillStyle='#8f9bb5';c.fillText(b,labX,y+8)}});
-    /* one zone only: where the left hand has to be right now; a change coming up is just a small note on its edge */
-    {const [y0,y1]=zone(tv);
+    /* only two labels: up = louder, down = softer */
+    c.font=`${wide?11:9}px 'Gowun Dodum'`;c.textAlign='left';c.fillStyle='#cfd8ea';c.fillText('▲크게',labX,my0+4);c.fillText('▼작게',labX,my1-2);
+    /* one pair of dashed lines: keep the left hand between them; the dynamic (p, f…) sits beside it */
+    {const [y0,y1]=zone(tv);c.fillStyle='#f7e9b0';c.font="italic bold 16px Georgia,serif";c.fillText(dynLabel(tv),labX,(y0+y1)/2+5);
       if(Math.abs(nt-tv)>.08){c.fillStyle='#f7e9b0';c.font="bold 10px 'Gowun Dodum'";c.textAlign='center';c.fillText(nt>tv?'곧 ⬆':'곧 ⬇',colC,nt>tv?y0-7:y1+9);c.textAlign='left'}}
     if(handFresh){const ok=Math.abs(vol-tv)<TOL,y=yv(vol),r=Math.max(10,Math.min(15,mw*.2));c.fillStyle=ok?'#5fd08a':'#ff6b5a';c.beginPath();c.arc(colC,y,r,0,7);c.fill();c.strokeStyle='#fff';c.lineWidth=2;c.stroke();
       c.fillStyle='#fff';c.font=`bold ${Math.round(r*1.1)}px sans-serif`;c.textAlign='center';c.fillText('✋',colC,y+1);
