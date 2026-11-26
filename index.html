@@ -6,7 +6,7 @@
 <title>사계 지휘자 3D · 봄</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Gowun+Dodum&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Nanum+Myeongjo:wght@400;800&family=Gowun+Dodum&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/pose.js" crossorigin="anonymous"></script>
 <style>
 *{box-sizing:border-box}
@@ -30,6 +30,72 @@ button:focus-visible{outline:3px solid #c5eb45;outline-offset:2px}
 .toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:#14110ecc;border:1px solid #ffffff22;padding:8px 16px;border-radius:12px;font-size:15px;max-width:min(560px,80vw);text-align:center;pointer-events:none}
 .judge{position:fixed;left:50%;top:30%;transform:translate(-50%,-50%);font-family:Gaegu,cursive;font-size:44px;font-weight:700;text-shadow:0 3px 10px #000;opacity:0;transition:opacity .15s;pointer-events:none}
 .judge.show{opacity:1}
+#cue{position:fixed;left:50%;bottom:9vh;transform:translateX(-50%);z-index:8;max-width:min(760px,90vw);text-align:center;font-family:Gaegu,cursive;font-size:clamp(22px,2.6vw,32px);line-height:1.25;color:#fff;background:#0b0806c8;border:1px solid #f2d22e66;border-radius:14px;padding:10px 24px;pointer-events:none;opacity:0;transition:opacity .4s}#cue.on{opacity:1}#cue small{display:block;font-family:'Gowun Dodum',sans-serif;font-size:14px;color:#f2d22e;letter-spacing:.15em;margin-bottom:2px}
+.paper{position:relative;background:#f3ecdc;color:#1d1a16;max-width:760px;width:100%;max-height:calc(100vh - 32px);overflow:auto;padding:18px 30px 20px;box-shadow:0 20px 60px #000a;font-family:'Nanum Myeongjo',serif;transform:rotate(-.6deg);animation:paperIn .7s cubic-bezier(.2,1.3,.4,1)}
+@keyframes paperIn{from{transform:translateY(60px) rotate(-7deg) scale(.88);opacity:0}}
+.mast{display:flex;justify-content:space-between;align-items:end;border-bottom:4px double #1d1a16;padding-bottom:6px;font:12px 'Gowun Dodum',sans-serif;color:#5a5246}
+.mast b{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:clamp(30px,4.4vw,44px);color:#1d1a16;letter-spacing:.1em;line-height:1}
+.pkick{margin:12px 0 2px;font:700 12px 'Gowun Dodum',sans-serif;color:#9b2c1e;letter-spacing:.06em}
+.paper h2{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:clamp(26px,3.4vw,36px);line-height:1.2;margin:0 0 6px;padding-right:130px}
+.deck{font-size:15px;color:#4a4237;margin:0 0 12px;border-bottom:1px solid #1d1a1633;padding-bottom:10px}
+.pcols{display:grid;grid-template-columns:1.5fr 1fr;gap:22px}
+.pbody p{font-size:14.5px;line-height:1.8;margin:0 0 8px;text-align:justify}.pbody p:first-child::first-letter{font-size:2.4em;float:left;line-height:1;margin:2px 6px 0 0;font-weight:800}.pbody .byline{font:12px 'Gowun Dodum',sans-serif;color:#6b6152;text-align:right}
+.paper .rows{margin-top:0}.paper .rows div{background:#e6dcc6;font-family:'Gowun Dodum',sans-serif}.paper .rows div.big{background:#1d1a16;color:#f3ecdc}
+.pfact{font:11.5px 'Gowun Dodum',sans-serif;color:#6b6152;margin:0}
+.stamps{display:flex;gap:10px;align-items:center;margin:12px 0 8px;flex-wrap:wrap;border-top:1px solid #1d1a1633;padding-top:12px}
+.stamps span{width:52px;height:52px;border-radius:50%;border:2px dashed #1d1a1640;display:grid;place-items:center;color:#1d1a1660;font-family:Gaegu,cursive;font-size:19px}
+.stamps span.ok{border:3px solid #b3261e;color:#b3261e;transform:rotate(-8deg)}.stamps span.no{border:2px solid #6b6152;color:#6b6152}.stamps span.now{animation:stampIn .6s .6s both cubic-bezier(.2,1.6,.4,1)}
+.stamps em{font:13px 'Gowun Dodum',sans-serif;font-style:normal;margin-left:6px;color:#4a4237}
+.pstamp{position:absolute;right:26px;top:76px;border:4px solid #b3261e;color:#b3261e;font-family:Gaegu,cursive;font-weight:700;font-size:34px;padding:2px 14px;border-radius:10px;transform:rotate(12deg);opacity:.85;animation:stampIn .5s 1s both cubic-bezier(.2,1.6,.4,1);pointer-events:none}
+.pstamp.t2{border-color:#6b6152;color:#6b6152}
+@keyframes stampIn{from{transform:scale(2.6) rotate(-20deg);opacity:0}}
+@media(max-width:640px){.pcols{grid-template-columns:1fr}.pstamp{top:56px;font-size:24px}.paper h2{padding-right:0}}
+#haze{position:fixed;inset:0;pointer-events:none;opacity:0;transition:opacity .3s}
+#haze.beat{animation:hazeB 2.4s ease-in-out infinite}@keyframes hazeB{50%{filter:brightness(1.25)}}
+#threat{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:6;display:flex;align-items:center;gap:8px;background:#0b0806c8;border:1px solid #ffffff22;border-radius:999px;padding:6px 14px;font-family:'Gowun Dodum',sans-serif;font-size:14px;color:#fff;pointer-events:none}#threat[hidden]{display:none}
+#threat b{white-space:nowrap}@media(max-width:900px){#threat{top:58px;font-size:12px;padding:4px 10px}}#threat span{font-size:18px}#threat i{display:block;width:clamp(90px,14vw,170px);height:10px;border-radius:5px;background:#ffffff22;overflow:hidden}#threat u{display:block;height:100%;width:0;border-radius:5px;background:#ff7a3c;transition:width .3s}
+#threat em{font-style:normal;font-family:'DM Mono',monospace;font-size:12px;min-width:34px;text-align:right;opacity:.85}#threat.hot{border-color:#ff7a3c;animation:thr 1s ease-in-out infinite}@keyframes thr{50%{box-shadow:0 0 18px #ff7a3c88}}
+#nature{position:fixed;left:50%;top:35%;transform:translate(-50%,-100%) scale(.8);z-index:7;pointer-events:none;opacity:0;transition:opacity .3s,transform .3s;text-align:center;font-family:Gaegu,cursive;font-size:clamp(22px,2.4vw,32px);font-weight:700;color:#fff;text-shadow:0 3px 12px #000,0 0 2px #000;white-space:nowrap}
+#nature.on{opacity:1;transform:translate(-50%,-100%) scale(1)}#nature small{display:block;font-family:'Gowun Dodum',sans-serif;font-size:14px;font-weight:400;color:#f2d22e}#nature.win{color:#c5eb45}
+.cert{position:relative;background:#f6efdc;color:#1d1a16;max-width:620px;width:100%;max-height:calc(100vh - 32px);overflow:auto;padding:30px 36px 24px;text-align:center;font-family:'Nanum Myeongjo',serif;border:10px double #b08a3e;box-shadow:0 20px 60px #000b;animation:paperIn .8s cubic-bezier(.2,1.3,.4,1)}
+.ct-top{font:500 12px 'DM Mono',monospace;letter-spacing:.3em;color:#9b2c1e;margin:0}
+.cert h2{font-weight:800;font-size:clamp(30px,4.6vw,46px);margin:8px 0 14px;letter-spacing:.08em}
+.ct-body{font-size:16px;line-height:1.9;margin:0 0 6px;word-break:keep-all}
+.cert .stamps{justify-content:center;border-top:1px solid #b08a3e66}
+.cert .stamps span{animation:stampIn .5s both cubic-bezier(.2,1.6,.4,1)}.cert .stamps span:nth-child(2){animation-delay:.25s}.cert .stamps span:nth-child(3){animation-delay:.5s}.cert .stamps span:nth-child(4){animation-delay:.75s}
+.ct-sign{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin:8px 0 4px;font-size:14px}.ct-sign b{display:grid;place-items:center;width:46px;height:46px;border:3px solid #b3261e;color:#b3261e;font-size:22px;transform:rotate(-8deg)}
+.btn.pulse{animation:btnP 1.4s ease-in-out infinite}@keyframes btnP{50%{box-shadow:0 0 0 6px #c5eb4555}}
+/* ---- green room (지휘자 대기실): the game starts here; the mirror holds the webcam set-up, the scores on the dressing table pick the piece ---- */
+.linkbtn{background:none;border:0;color:#cfd8e0;text-decoration:underline;font-size:13px;cursor:pointer}
+#intro .openscore{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:12;max-height:calc(100vh - 40px);overflow:auto;box-shadow:0 0 0 100vmax #000a,0 20px 60px #000b;animation:scoreIn .35s ease}
+@keyframes scoreIn{from{transform:translate(-50%,-46%) scale(.94);opacity:0}}
+#grFade{position:fixed;inset:0;z-index:30;background:#000;display:grid;place-items:center;color:#e8c98a;font-family:Gaegu,cursive;font-size:32px;opacity:0;pointer-events:none;transition:opacity .45s}#grFade.on{opacity:1;pointer-events:auto}
+.greenroom{position:fixed;inset:0;z-index:10;pointer-events:none;color:#f4efe6;font-family:'Gowun Dodum',sans-serif}
+.greenroom[hidden]{display:none}.greenroom>*{pointer-events:auto}.greenroom.dim>*:not(.openscore):not(.gr-bubble):not(.gr-sign){visibility:hidden}
+.gr-sign{position:absolute;left:50%;top:14px;transform:translateX(-50%);background:#1d140ecc;border:1px solid #c9a46a;color:#e8c98a;padding:6px 18px;border-radius:6px;font:500 13px 'DM Mono',monospace;letter-spacing:.25em;white-space:nowrap;pointer-events:none!important}
+.gr-hint{position:absolute;left:18px;bottom:20px;max-width:300px;margin:0;background:#0b0806b8;padding:8px 12px;border-radius:10px;font-size:13px;line-height:1.55;pointer-events:none!important}.gr-hint b{display:block;color:#f2d22e;font-weight:400}
+.gr-bubble{position:absolute;left:50%;top:50px;transform:translateX(-50%);display:flex;align-items:center;gap:14px;background:#fffdf6;color:#2a1c12;border-radius:18px;padding:12px 24px;font-size:21px;line-height:1.45;box-shadow:0 10px 30px #000b;width:max-content;max-width:min(760px,92vw);word-break:keep-all;pointer-events:none!important}
+.gr-bubble i{font-style:normal;font-size:36px}.gr-bubble small{display:block;font-size:12px;color:#9b2c1e;font-weight:700;letter-spacing:.1em}
+.gr-bubble.say{animation:saypop .35s cubic-bezier(.2,1.5,.4,1)}@keyframes saypop{from{transform:translateX(-50%) scale(.92);opacity:.4}}
+.gr-bar{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}.gr-bar[hidden]{display:none}
+.linkbtn{background:none;border:0;color:#e8e2d6;text-decoration:underline;font-size:13px;cursor:pointer;text-shadow:0 1px 4px #000}
+.gr-ready{position:absolute;right:18px;bottom:22px;background:#0b0806c8;padding:6px 12px;border-radius:999px;font-size:13px;color:#c5eb45}.gr-ready[hidden]{display:none}.gr-ready button{margin-left:8px;background:none;border:0;color:#fff;text-decoration:underline;cursor:pointer;font-size:12px}
+.gr-trophy{position:absolute;right:18px;bottom:64px}
+#grLine{position:fixed;left:0;top:0;width:0;height:0;z-index:4;pointer-events:none;display:none;overflow:visible}#grLine line{vector-effect:non-scaling-stroke}#glGuide{stroke:#fff;stroke-width:2.2;stroke-dasharray:9 6;opacity:.85}
+.calib.room .calib-box svg{display:none}/* in the room the fixed #grLine is the only mark on the glass */
+#grTip{position:fixed;z-index:11;pointer-events:none;background:#0b0806d8;color:#fff;padding:4px 10px;border-radius:8px;font-size:13px;transform:translate(14px,14px);display:none;white-space:nowrap}
+.inroom #labels,.inroom .stageSign,.inroom .valance,.inroom #stand,.inroom #fx,.inroom .hud,.inroom #ctrlBar,.inroom #threat,.inroom #judge,.inroom .cam,.inroom #toast,.inroom #nature,.inroom #haze,.inroom #chapter,.inroom #cue{visibility:hidden!important}
+.calib.room{background:transparent;place-items:end center;pointer-events:none}
+.calib.room .calib-wrap{pointer-events:auto;background:#14110ee8;padding:12px 18px;width:min(560px,92vw);margin-bottom:10px;border-radius:10px}
+.calib.room .calib-wrap h2{display:none}.calib.room .calib-box{position:fixed;z-index:-1;border:0;background:transparent}.calib.room .calib-box canvas,.calib.room .calib-box video{display:none!important}
+@media(max-width:640px){.gr-hint{display:none}.gr-bubble{top:44px;width:calc(100vw - 20px);max-width:none;font-size:16px;padding:10px 14px}.gr-bubble i{font-size:26px}.gr-ready{bottom:auto;top:auto;right:10px;bottom:96px}}
+#chapter{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;z-index:9;opacity:0}
+#chapter>div{width:100%;padding:28px 0 22px;background:#0b0806d0;border-top:2px solid #f2d22e;border-bottom:2px solid #f2d22e;text-align:center}
+#chapter b{display:block;font-family:Gaegu,cursive;font-size:min(15vw,150px);line-height:1;color:#ffe680;letter-spacing:.04em;text-shadow:0 6px 30px #000c}
+#chapter small{display:block;font-size:clamp(15px,1.8vw,22px);letter-spacing:.25em;color:#f4efe6;margin-top:10px}
+#chapter.on{animation:chap 2.6s ease forwards}#chapter.on b{animation:stamp 2.6s cubic-bezier(.2,1.6,.4,1) forwards}
+@keyframes chap{0%{opacity:0}8%{opacity:1}78%{opacity:1}100%{opacity:0}}
+@keyframes stamp{0%{transform:scale(2.2) rotate(-12deg)}14%{transform:scale(1) rotate(-4deg)}100%{transform:scale(1.04) rotate(-4deg)}}
 #stand{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(780px,96vw);height:min(280px,38vh);pointer-events:none}
 .ctrl{position:fixed;right:14px;top:14px;z-index:11;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .btn{border:0;padding:9px 14px;font-weight:700;background:#f4efe6;color:#1b1712;border-radius:4px}
@@ -77,56 +143,38 @@ button:focus-visible{outline:3px solid #c5eb45;outline-offset:2px}
 #calibDots{display:none;margin:4px 0 0;font-size:30px;letter-spacing:8px;color:#c5eb45}.calib.step3 #calibDots{display:block}
 .calib-row{display:flex;gap:8px;justify-content:center;margin-top:12px}
 .card.wide{max-width:680px}
-.seasons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
-.season{position:relative;text-align:left;padding:14px 16px;border:2px solid #d8d0e4;background:#fff;border-radius:8px;color:#211e29}
-.season b{display:block;font-family:Gaegu,cursive;font-size:30px;line-height:1}
-.season small{display:block;margin-top:4px;font-size:13px;color:#4b4558}
-.season em{display:block;margin-top:6px;font-style:normal;font-size:12px;color:#8964b3}
-.season i{position:absolute;right:10px;top:10px;font-style:normal;font-size:11px;font-weight:700;background:#ece8f3;color:#615b6e;padding:2px 8px;border-radius:10px}
-.season:hover:not(.soon){border-color:#8964b3;background:#f7f2ff}
-.season.soon{opacity:.6;cursor:not-allowed}
+.pg-stamp{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font:700 15px Gaegu,cursive;border:2px dashed #c9a46a44;color:#c9a46a66}
+.pg-stamp.ok{border:3px solid #e0533d;color:#e0533d;transform:rotate(-10deg)}.pg-stamp.no{border:2px solid #8a7f6e;color:#8a7f6e}
+.prog-page{border-top:6px solid #9b2c1e}.prog-page h2{font-family:'Nanum Myeongjo',serif;font-weight:800}.prog-page .kicker{color:#9b2c1e}
+@media(max-width:640px){.hcs{grid-template-columns:1fr}.hcol:last-child .hhead{text-align:left}.hc b,.hc i{min-width:0!important}}
 </style>
 </head>
 <body>
-<canvas id="gl"></canvas>
+<canvas id="gl"></canvas><div id="haze"></div>
 <div id="labels"></div><div id="rehBig" hidden></div><div id="stageSign" class="stageSign"><b>봄</b><small>Spring · 비발디 「사계」</small></div><div id="valance" class="valance">봄</div>
 <canvas id="fx"></canvas>
 <div class="hud"><h1>사계 지휘자 <span>· 봄</span></h1><p>비발디 「사계」 봄 1악장</p></div>
 <p class="toast" id="toast" style="opacity:0"></p>
-<div class="judge" id="judge"></div>
+<div class="judge" id="judge"></div><div id="chapter"></div><div id="cue"></div><div id="nature"></div><div id="threat" hidden><span></span><b></b><i><u></u></i><em></em></div>
 <canvas id="stand"></canvas>
-<div class="ctrl">
+<div class="ctrl" id="ctrlBar">
+  <button class="btn small" id="skipBtn" hidden>⏭ 바로 연주</button>
   <button class="btn small" id="pauseBtn" hidden>⏸ 일시정지</button>
   <button class="btn small" id="camBtn">웹캠 지휘 켜기</button>
-  <button class="btn small" id="seasonBtn" hidden>🍂 계절 선택</button>
+  <button class="btn small" id="seasonBtn" hidden>🚪 대기실</button>
   </div>
-<div class="overlay" id="pauseCard" hidden><div class="card" style="max-width:380px;text-align:center"><h2>⏸ 일시정지</h2><p>스페이스바를 다시 누르거나 계속하기를 눌러요.</p><div class="row" style="justify-content:center"><button class="btn go big" id="resumeBtn">▶ 계속하기</button><button class="btn" id="restartBtn">↺ 처음부터</button><button class="btn" id="pauseSeason">🍂 계절 선택</button></div></div></div>
+<div class="overlay" id="pauseCard" hidden><div class="card" style="max-width:380px;text-align:center"><h2>⏸ 일시정지</h2><p>스페이스바를 다시 누르거나 계속하기를 눌러요.</p><div class="row" style="justify-content:center"><button class="btn go big" id="resumeBtn">▶ 계속하기</button><button class="btn" id="restartBtn">↺ 처음부터</button><button class="btn" id="pauseSeason">🚪 대기실로</button></div></div></div>
 <div class="cam" id="camBox"><div style="position:relative"><video id="video" playsinline muted></video><canvas id="camOv" style="position:absolute;inset:0;width:100%;height:100%"></canvas></div><p id="camState">얼굴과 손을 찾는 중…</p></div>
 
-<div class="overlay" id="intro">
-  <div class="card wide">
-    <div id="rehStart">
-      <p class="kicker">MISSION · 사라져가는 사계절을 지켜라</p>
-      <h2>사계 지휘자</h2>
-      <p class="story">기후변화로 사계절이 사라져 가요. 비발디 「사계」를 지휘해서 무대 위의 계절을 지켜주세요.</p>
-      <p>먼저 <b>반짝반짝 작은 별</b>로 리허설을 해요. 웹캠 앞에서 얼굴과 두 손을 점선에 한 번 맞추고, 손을 자유롭게 움직이며 지휘하는 법을 익혀요.</p>
-      <div class="row"><button class="btn go big" id="rehGo">📷 웹캠 켜고 리허설 시작</button><button class="btn" id="rehNo">리허설 없이 계절 고르기</button></div>
-      <p class="data" id="camErr0" style="color:#b3261e;font-weight:700" hidden></p>
-    </div>
-    <div id="seasonPick" hidden>
-      <p class="kicker">MISSION · 사라져가는 사계절을 지켜라</p>
-      <h2>어떤 계절을 지킬까요?</h2>
-      <p>기후변화로 사계절의 모습이 바뀌고 있어요. 당신은 비발디 「사계」를 지휘하며 무대 위의 계절을 지키는 지휘자예요.</p>
-      <div class="seasons">
-        <button class="season" data-s="spring"><b>봄</b><small>1악장 · 서두르지 말고 제때 저어 꽃을 피워요</small><em>봄 시작이 17일 빨라졌어요</em></button>
-        <button class="season" data-s="summer"><b>여름</b><small>3악장 폭풍 · 제때 끊어 길어진 여름을 멈춰요</small><em>98일 → 118일, 가장 긴 계절</em></button>
-        <button class="season" data-s="autumn"><b>가을</b><small>1악장 + 3악장 · 춤과 사냥 · 늘이기로 가을을 붙잡아요</small><em>73일 → 69일, 가장 짧은 계절</em></button>
-        <button class="season" data-s="winter"><b>겨울</b><small>1악장 + 2악장 · 작게 지휘해 펑펑 눈을 지켜요</small><em>109일 → 87일</em></button>
-      </div>
-      <p class="data">계절 길이: 기상청, 1912–1940년과 1991–2020년 평균 비교</p>
-    </div>
-    <div id="seasonInfo" hidden>
-    <p class="kicker">MISSION · 사라져가는 사계절을 지켜라</p>
+<div class="greenroom" id="intro">
+  <div class="gr-sign">CONDUCTOR · 지휘자 대기실</div>
+  <p class="gr-hint" id="grHint">🪑 의자에 앉으면 거울 보며 어깨선 맞추기<br>📖 앉아서 마우스를 내리면 악보 · 눌러서 들기<br>🎭 악보를 들고 빨간 커튼 문을 고르면 열려요<b id="pgCount"></b></p>
+  <div class="gr-bubble"><i>🎧</i><div><small>무대감독</small><span id="grBubble">지휘자님, 오셨어요? 공연 전에 거울 앞 의자에 앉아 어깨선부터 맞춰 볼까요?</span></div></div>
+  <div class="gr-bar" id="grBar"><button class="btn go big" id="sitBtn">🪑 의자에 앉기</button><p class="data" id="camErr0" style="color:#ffb3a8;font-weight:700;margin:0;text-shadow:0 1px 4px #000" hidden></p><button class="linkbtn" id="noCamBtn" hidden>카메라 없이 키보드로 할게요</button></div>
+  <div class="gr-ready" id="grReady" hidden>✓ 지휘 준비 완료<button id="recalBtn">다시 맞추기</button><button id="grViewBtn">방 둘러보기</button></div>
+  <button class="btn go pulse gr-trophy" id="finaleBtn2" hidden>🏆 사계 완성 피날레</button>
+    <div id="seasonInfo" class="card wide prog-page openscore" hidden>
+    <p class="kicker">오늘의 악보</p>
     <h2 id="seasonTitle">오늘의 공연: 봄</h2>
     <p class="story" id="seasonStory">봄이 점점 빨리 왔다 가요. 지휘봉으로 봄을 끝까지 지켜주세요!</p>
     <h3>조작법</h3>
@@ -142,11 +190,18 @@ button:focus-visible{outline:3px solid #c5eb45;outline-offset:2px}
         <div class="hc"><i>🙌</i><b>양손 번쩍</b><span>두 손을 머리 위로</span></div>
       </div>
     </div>
-    <div class="row"><button class="btn go big" id="introCam">📷 웹캠 켜고 봄 지키러 가기</button><button class="btn" id="backSeason">← 계절 다시 고르기</button><button class="btn" id="startBtn" hidden>▶ 공연 시작</button></div>
+    <div class="row"><button class="btn go big" id="introCam">📷 웹캠 켜고 봄 지키러 가기</button><button class="btn" id="backSeason">← 악보 덮기</button><button class="btn" id="startBtn" hidden>▶ 공연 시작</button></div>
     <p class="data" id="camErr" style="margin-top:8px;color:#b3261e;font-weight:700" hidden></p>
     </div>
+  <div id="rehInfo" class="card wide prog-page openscore" hidden>
+    <p class="kicker">연습 악보 · 리허설</p>
+    <h2>반짝반짝 작은 별</h2>
+    <p class="story">본 공연 전에, 커튼이 닫힌 무대에서 단원들과 호흡을 맞춰요. 화면의 손 그림을 따라 오른손 젓기, 왼손 크기·멈춤·끊기, 양손 번쩍을 차례로 익혀요. 끝나면 다시 대기실로 돌아와요.</p>
+    <div class="row"><button class="btn go big" id="rehGo">🚪 리허설 무대로</button><button class="btn" id="rehBack">← 악보 덮기</button></div>
   </div>
 </div>
+<div id="grTip"></div><svg id="grLine" viewBox="0 0 160 90" preserveAspectRatio="none" aria-hidden="true"><line id="glGuide" x1="50" x2="110" y1="56" y2="56"/></svg>
+<div id="grFade">무대로 향하는 중…</div>
 
 <div class="overlay calib" id="calib" hidden>
   <div class="calib-wrap">
@@ -155,9 +210,10 @@ button:focus-visible{outline:3px solid #c5eb45;outline-offset:2px}
     <div class="calib-box">
       <video id="calibVideo" playsinline muted></video><canvas id="calibCv"></canvas>
       <svg viewBox="0 0 160 90" preserveAspectRatio="none" aria-hidden="true">
-        <g id="tFace"><ellipse class="t" cx="80" cy="30" rx="11" ry="15"/><text x="80" y="50">얼굴 · 정면</text></g><g id="tShoulder"><line class="t" x1="52" y1="56" x2="108" y2="56"/><text x="80" y="62">어깨를 이 선에</text></g><line id="tShNow" x1="46" x2="114" y1="56" y2="56" stroke="#ffb347" stroke-width=".7" opacity="0"/>
+        <g id="tG1"><g id="tFace"><ellipse class="t" cx="80" cy="30" rx="11" ry="15"/><text x="80" y="50">얼굴 · 정면</text></g><g id="tShoulder"><line class="t" x1="52" y1="56" x2="108" y2="56"/><text x="80" y="62">어깨를 이 선에</text></g>
         <g id="tLeft" transform="translate(32 60)"><g class="t-hand"></g><text x="0" y="20">왼손 · 소리 크기</text></g>
-        <g id="tRight" transform="translate(128 60)"><g class="t-hand"></g><text x="0" y="20">오른손 · 지휘봉</text></g>
+        <g id="tRight" transform="translate(128 60)"><g class="t-hand"></g><text x="0" y="20">오른손 · 지휘봉</text></g></g>
+        <line id="tShNow" x1="46" x2="114" y1="56" y2="56" stroke="#ffb347" stroke-width=".7" opacity="0"/>
       </svg>
     </div>
     <p id="calibDots"></p><div class="calib-bar"><i id="calibBar"></i></div>
@@ -166,40 +222,77 @@ button:focus-visible{outline:3px solid #c5eb45;outline-offset:2px}
 </div>
 
 <div class="overlay" id="result" hidden>
-  <div class="card">
-    <h2 id="resTitle">봄을 지켰어요</h2>
-    <p id="resMsg"></p>
-    <div class="rows" id="resRows"></div>
-    
+  <div class="paper">
+    <div class="mast"><span>계절 문화면</span><b>사계일보</b><span id="resDate"></span></div>
+    <p class="pkick" id="resKick"></p>
+    <h2 id="resTitle"></h2>
+    <p class="deck" id="resMsg"></p>
+    <div class="pcols"><div class="pbody" id="resBody"></div><aside><div class="rows" id="resRows"></div><p class="pfact">계절 길이: 기상청, 1912–1940년과 1991–2020년 평균 비교</p></aside></div>
+    <div class="stamps" id="resStamps"></div>
     <p class="data" style="font-size:11px;opacity:.75">음악: 안토니오 비발디 「사계」 Op.8 · 악보 데이터 Mutopia Project (CC BY-SA 3.0)를 코드 신시사이저로 연주</p>
-    <div class="row"><button class="btn go" id="againBtn">다시 지휘하기</button><button class="btn" id="otherSeason">다른 계절 고르기</button></div>
+    <div class="row"><button class="btn go" id="againBtn">다시 지휘하기</button><button class="btn" id="otherSeason">🚪 대기실로</button><button class="btn go pulse" id="finaleBtn" hidden>🎉 사계 완성 피날레</button></div>
+    <div class="pstamp" id="resStamp"></div>
   </div>
 </div>
 
-<script>
+<div class="overlay" id="cert" hidden>
+  <div class="cert">
+    <p class="ct-top">THE FOUR SEASONS · CERTIFICATE</p>
+    <h2>명예 지휘자 인증서</h2>
+    <p class="ct-body" id="certBody"></p>
+    <div class="stamps" id="certStamps"></div>
+    <div class="ct-sign"><span>사계 홀 자연 오케스트라 일동</span><b>印</b></div>
+    <div class="row" style="justify-content:center"><button class="btn go" id="certAgain">🎉 피날레 다시 보기</button><button class="btn" id="certBack">🚪 대기실로</button></div>
+  </div>
+</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {DRACOLoader} from 'three/addons/loaders/DRACOLoader.js';
+import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
+import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
+import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
+import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
+import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
+import {Reflector} from 'three/addons/objects/Reflector.js';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 (()=>{
 /* =========================================================
-   1. tiny WebGL renderer (no external library)
+   1. Three.js renderer
+   drawMesh() keeps the old immediate-mode call style: every frame all meshes are hidden,
+   and each drawMesh() shows one, sets its matrix and its colour (mul) / glow (tint).
    ========================================================= */
 const canvas=document.getElementById('gl');
-const gl=canvas.getContext('webgl',{antialias:true});
-if(!gl){document.getElementById('toast').textContent='이 브라우저는 WebGL을 지원하지 않아요.';return}
-const VS=`attribute vec3 aPos;attribute vec3 aNor;attribute vec3 aCol;
-uniform mat4 uProj,uView,uModel;uniform float uPoint;
-varying vec3 vN;varying vec3 vC;varying float vD;
-void main(){vec4 w=uModel*vec4(aPos,1.);vec4 v=uView*w;gl_Position=uProj*v;vN=(uModel*vec4(aNor,0.)).xyz;vC=aCol;vD=-v.z;gl_PointSize=uPoint;}`;
-const FS=`precision mediump float;varying vec3 vN;varying vec3 vC;varying float vD;
-uniform vec3 uTint,uMul,uFog;uniform float uUnlit,uFlash;
-void main(){vec3 n=normalize(vN);vec3 c=vC*uMul;
-if(uUnlit<.5){vec3 L1=normalize(vec3(.25,.9,.45));vec3 L2=normalize(vec3(-.6,.5,.5));
-float d=abs(dot(n,L1))*.72+abs(dot(n,L2))*.28;float hemi=.32+.12*n.y;c=c*(d+hemi)*vec3(1.06,.97,.86);}
-c+=uTint+uFlash*vec3(.55,.6,.75);
-float f=clamp((vD-7.)/16.,0.,1.)*.6;c=mix(c,uFog,f);gl_FragColor=vec4(c,1.);}`;
-function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(o);return o}
-const prog=gl.createProgram();gl.attachShader(prog,sh(gl.VERTEX_SHADER,VS));gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(prog);gl.useProgram(prog);
-const A={pos:gl.getAttribLocation(prog,'aPos'),nor:gl.getAttribLocation(prog,'aNor'),col:gl.getAttribLocation(prog,'aCol')};
-const U={};['uProj','uView','uModel','uPoint','uTint','uMul','uFog','uUnlit','uFlash'].forEach(n=>U[n]=gl.getUniformLocation(prog,n));
-gl.enable(gl.DEPTH_TEST);gl.clearColor(.1,.075,.06,1);
+let renderer;try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'})}catch(e){document.getElementById('toast').textContent='이 브라우저는 WebGL을 지원하지 않아요.';return}
+renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.85;/* both the green room and the hall felt too bright at 1.05 */
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+const gl={TRIANGLES:4,LINES:1,POINTS:0};/* old draw-mode names, kept so call sites read the same */
+const SRGB=THREE.SRGBColorSpace,lin=v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4);
+const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(58,1,.1,60);
+scene.background=new THREE.Color().setRGB(.1,.075,.06,SRGB);scene.fog=new THREE.Fog(0,7,34);
+/* lights: soft warm fill + two stage spots (shadows) + a cold flash light for lightning */
+const hemi=new THREE.HemisphereLight(new THREE.Color().setRGB(1,.94,.85,SRGB),new THREE.Color().setRGB(.25,.16,.1,SRGB),1.1);scene.add(hemi);
+const keyL=new THREE.DirectionalLight(new THREE.Color().setRGB(1,.93,.8,SRGB),1.1);keyL.position.set(2.5,9,4.5);scene.add(keyL);
+const fillL=new THREE.DirectionalLight(new THREE.Color().setRGB(.75,.8,1,SRGB),.45);fillL.position.set(-6,5,5);scene.add(fillL);
+const SPOT=[2,1.2];/* stage spot strengths (centre, sides) */
+const spots=[[0,7.6,3.2,0,0,-3,.62],[-4.5,7.4,1.5,-2.5,0,-5,.5],[4.5,7.4,1.5,2.5,0,-5,.5]].map(([x,y,z,tx,ty,tz,a],i)=>{const s=new THREE.SpotLight(0xfff0d8,SPOT[i?1:0],0,a,.55,0);s.position.set(x,y,z);s.target.position.set(tx,ty,tz);
+  if(!i){s.castShadow=true;s.shadow.mapSize.set(1024,1024);s.shadow.bias=-.0004;s.shadow.normalBias=.02;s.shadow.camera.near=2;s.shadow.camera.far=22}scene.add(s,s.target);return s});
+const flashL=new THREE.AmbientLight(new THREE.Color().setRGB(.75,.82,1,SRGB),0);scene.add(flashL);
+/* second scene for the conductor's mittens: drawn last, on top of everything */
+const ovScene=new THREE.Scene(),ovCam=new THREE.PerspectiveCamera(58,1,.1,10);
+ovScene.add(new THREE.HemisphereLight(0xfff4e6,0x3a2a40,2.6));{const d=new THREE.DirectionalLight(0xffffff,2.2);d.position.set(.3,1,.6);ovScene.add(d)}
+const composer=new EffectComposer(renderer),ovPass=new RenderPass(ovScene,ovCam);ovPass.clear=false;ovPass.clearDepth=true;
+const bloom=new UnrealBloomPass(new THREE.Vector2(256,256),.6,.5,1.35);
+const mainRP=new RenderPass(scene,camera);composer.addPass(mainRP);composer.addPass(ovPass);composer.addPass(bloom);composer.addPass(new OutputPass());
+/* quality steps if the frame rate drops (MediaPipe runs on the same machine): 2 = all, 1 = no shadows, 0 = no bloom */
+let quality=2;const ALL=[];
+function setQuality(q){quality=q;spots[0].castShadow=q>1;renderer.shadowMap.enabled=q>1;bloom.enabled=q>0;ALL.forEach(m=>{const mm=m.userData;[mm.std,mm.basic].forEach(x=>x&&(x.needsUpdate=true))})}
+const stdMat=()=>new THREE.MeshStandardMaterial({vertexColors:true,roughness:.78,metalness:0,side:THREE.DoubleSide});
+const basicMat=()=>new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.DoubleSide});
+const DOT=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d'),g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'#fff');g.addColorStop(.55,'#fffd');g.addColorStop(1,'#fff0');x.fillStyle=g;x.fillRect(0,0,64,64);const t=new THREE.CanvasTexture(c);t.colorSpace=SRGB;return t})();
+function reg(m,sc=scene){m.matrixAutoUpdate=false;m.visible=false;sc.add(m);ALL.push(m);return m}
+function mkMesh(geo,sc){const mt=stdMat(),m=new THREE.Mesh(geo,mt);m.userData.std=mt;return reg(m,sc)}
 
 /* ---- mat4 (column major) ---- */
 const M4={
@@ -210,54 +303,61 @@ const M4={
   Ry(a){const c=Math.cos(a),s=Math.sin(a);return new Float32Array([c,0,-s,0,0,1,0,0,s,0,c,0,0,0,0,1])},
   Rx(a){const c=Math.cos(a),s=Math.sin(a);return new Float32Array([1,0,0,0,0,c,s,0,0,-s,c,0,0,0,0,1])},
   Rz(a){const c=Math.cos(a),s=Math.sin(a);return new Float32Array([c,s,0,0,-s,c,0,0,0,0,1,0,0,0,0,1])},
-  persp(fy,asp,n,f){const t=1/Math.tan(fy/2);return new Float32Array([t/asp,0,0,0,0,t,0,0,0,0,(f+n)/(n-f),-1,0,0,2*f*n/(n-f),0])},
-  look(e,c,u){let z=[e[0]-c[0],e[1]-c[1],e[2]-c[2]];let l=Math.hypot(...z);z=z.map(v=>v/l);
-    let x=[u[1]*z[2]-u[2]*z[1],u[2]*z[0]-u[0]*z[2],u[0]*z[1]-u[1]*z[0]];l=Math.hypot(...x);x=x.map(v=>v/l);
-    const y=[z[1]*x[2]-z[2]*x[1],z[2]*x[0]-z[0]*x[2],z[0]*x[1]-z[1]*x[0]];
-    return new Float32Array([x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-(x[0]*e[0]+x[1]*e[1]+x[2]*e[2]),-(y[0]*e[0]+y[1]*e[1]+y[2]*e[2]),-(z[0]*e[0]+z[1]*e[1]+z[2]*e[2]),1])},
   ap(m,p){return[m[0]*p[0]+m[4]*p[1]+m[8]*p[2]+m[12],m[1]*p[0]+m[5]*p[1]+m[9]*p[2]+m[13],m[2]*p[0]+m[6]*p[1]+m[10]*p[2]+m[14]]},
   chain(...ms){return ms.reduce((a,b)=>M4.mul(a,b))}
 };
-const hex=h=>[parseInt(h.slice(1,3),16)/255,parseInt(h.slice(3,5),16)/255,parseInt(h.slice(5,7),16)/255];
+const hex=h=>{if(h.length===4)h='#'+h[1]+h[1]+h[2]+h[2]+h[3]+h[3];return[parseInt(h.slice(1,3),16)/255,parseInt(h.slice(3,5),16)/255,parseInt(h.slice(5,7),16)/255]};/* '#333' short form too */
 
-/* ---- geometry builder: flat-shaded triangles ---- */
+/* ---- geometry builder: triangles; spheres, tubes and cylinder sides get smooth normals (one group per call) ---- */
+let GID=0;
 class Geo{
-  constructor(){this.p=[];this.n=[];this.c=[]}
+  constructor(){this.p=[];this.n=[];this.c=[];this.s=[];this.cur=0}
   tri(a,b,c,col){const u=[b[0]-a[0],b[1]-a[1],b[2]-a[2]],v=[c[0]-a[0],c[1]-a[1],c[2]-a[2]];let n=[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]];const l=Math.hypot(...n)||1;n=n.map(x=>x/l);
-    for(const q of[a,b,c]){this.p.push(...q);this.n.push(...n);this.c.push(...col)}}
+    for(const q of[a,b,c]){this.p.push(...q);this.n.push(...n);this.c.push(...col);this.s.push(this.cur)}}
   quad(a,b,c,d,col){this.tri(a,b,c,col);this.tri(a,c,d,col)}
   box(M,w,h,d,col){col=hex(col);const x=w/2,y=h/2,z=d/2,P=[[-x,-y,-z],[x,-y,-z],[x,y,-z],[-x,y,-z],[-x,-y,z],[x,-y,z],[x,y,z],[-x,y,z]].map(p=>M4.ap(M,p));
     [[0,1,2,3],[5,4,7,6],[4,0,3,7],[1,5,6,2],[3,2,6,7],[4,5,1,0]].forEach(f=>this.quad(P[f[0]],P[f[1]],P[f[2]],P[f[3]],col))}
-  cyl(M,rt,rb,h,seg,col,a0=0,a1=Math.PI*2,caps=true){col=hex(col);
+  cyl(M,rt,rb,h,seg,col,a0=0,a1=Math.PI*2,caps=true){col=hex(col);const G=++GID;
     for(let i=0;i<seg;i++){const t0=a0+(a1-a0)*i/seg,t1=a0+(a1-a0)*(i+1)/seg;
       const b0=M4.ap(M,[Math.sin(t0)*rb,0,Math.cos(t0)*rb]),b1=M4.ap(M,[Math.sin(t1)*rb,0,Math.cos(t1)*rb]),u0=M4.ap(M,[Math.sin(t0)*rt,h,Math.cos(t0)*rt]),u1=M4.ap(M,[Math.sin(t1)*rt,h,Math.cos(t1)*rt]);
-      this.quad(b0,b1,u1,u0,col);
+      this.cur=G;this.quad(b0,b1,u1,u0,col);this.cur=0;
       if(caps){if(rt>0)this.tri(M4.ap(M,[0,h,0]),u0,u1,col);if(rb>0)this.tri(M4.ap(M,[0,0,0]),b1,b0,col)}}}
   sphere(M,r,ws,hs,col,sy=1){col=hex(col);const pt=(i,j)=>{const th=Math.PI*j/hs,ph=Math.PI*2*i/ws;return M4.ap(M,[r*Math.sin(th)*Math.sin(ph),r*Math.cos(th)*sy,r*Math.sin(th)*Math.cos(ph)])};
-    for(let j=0;j<hs;j++)for(let i=0;i<ws;i++)this.quad(pt(i,j),pt(i,j+1),pt(i+1,j+1),pt(i+1,j),col)}
+    this.cur=++GID;for(let j=0;j<hs;j++)for(let i=0;i<ws;i++)this.quad(pt(i,j),pt(i,j+1),pt(i+1,j+1),pt(i+1,j),col);this.cur=0}
   seg(p0,p1,r,col,n=6){col=hex(col);const d=[p1[0]-p0[0],p1[1]-p0[1],p1[2]-p0[2]],L=Math.hypot(...d),D=d.map(v=>v/L);
     let u=Math.abs(D[1])<.9?[0,1,0]:[1,0,0];let a=[D[1]*u[2]-D[2]*u[1],D[2]*u[0]-D[0]*u[2],D[0]*u[1]-D[1]*u[0]];const la=Math.hypot(...a);a=a.map(v=>v/la);
     const b=[D[1]*a[2]-D[2]*a[1],D[2]*a[0]-D[0]*a[2],D[0]*a[1]-D[1]*a[0]];
     const ring=(p,i)=>{const t=Math.PI*2*i/n;return[0,1,2].map(k=>p[k]+(a[k]*Math.cos(t)+b[k]*Math.sin(t))*r)};
-    for(let i=0;i<n;i++)this.quad(ring(p0,i),ring(p0,i+1),ring(p1,i+1),ring(p1,i),col)}
+    this.cur=++GID;for(let i=0;i<n;i++)this.quad(ring(p0,i),ring(p0,i+1),ring(p1,i+1),ring(p1,i),col);this.cur=0}
   arcSlab(r0,r1,y0,y1,a0,a1,n,top,front){top=hex(top);front=hex(front);const P=(r,a,y)=>[Math.sin(a)*r,y,-Math.cos(a)*r];
     for(let i=0;i<n;i++){const t0=a0+(a1-a0)*i/n,t1=a0+(a1-a0)*(i+1)/n;
       this.quad(P(r0,t0,y1),P(r1,t0,y1),P(r1,t1,y1),P(r0,t1,y1),top);
       this.quad(P(r0,t0,y0),P(r0,t1,y0),P(r0,t1,y1),P(r0,t0,y1),front)}}
   ring(cx,y,cz,r0,r1,n){const col=[1,1,1];for(let i=0;i<n;i++){const t0=Math.PI*2*i/n,t1=Math.PI*2*(i+1)/n;
     const A=[cx+Math.sin(t0)*r0,y,cz+Math.cos(t0)*r0],B=[cx+Math.sin(t0)*r1,y,cz+Math.cos(t0)*r1],C=[cx+Math.sin(t1)*r1,y,cz+Math.cos(t1)*r1],D=[cx+Math.sin(t1)*r0,y,cz+Math.cos(t1)*r0];this.quad(A,B,C,D,col)}}
-  upload(){const mk=a=>{const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(a),gl.STATIC_DRAW);return b};
-    return{p:mk(this.p),n:mk(this.n),c:mk(this.c),count:this.p.length/3}}
-}
-function bindMesh(m){
-  gl.bindBuffer(gl.ARRAY_BUFFER,m.p);gl.enableVertexAttribArray(A.pos);gl.vertexAttribPointer(A.pos,3,gl.FLOAT,false,0,0);
-  gl.bindBuffer(gl.ARRAY_BUFFER,m.n);gl.enableVertexAttribArray(A.nor);gl.vertexAttribPointer(A.nor,3,gl.FLOAT,false,0,0);
-  gl.bindBuffer(gl.ARRAY_BUFFER,m.c);gl.enableVertexAttribArray(A.col);gl.vertexAttribPointer(A.col,3,gl.FLOAT,false,0,0);
+  smooth(){const s=this.s,p=this.p,n=this.n.slice(),acc=new Map(),key=i=>s[i]+'|'+Math.round(p[i*3]*1e4)+','+Math.round(p[i*3+1]*1e4)+','+Math.round(p[i*3+2]*1e4);
+    for(let i=0;i<s.length;i++)if(s[i]){const k=key(i),a=acc.get(k)||[0,0,0];a[0]+=n[i*3];a[1]+=n[i*3+1];a[2]+=n[i*3+2];acc.set(k,a)}
+    for(let i=0;i<s.length;i++)if(s[i]){const a=acc.get(key(i)),l=Math.hypot(...a);if(l>1e-6){n[i*3]=a[0]/l;n[i*3+1]=a[1]/l;n[i*3+2]=a[2]/l}}return n}
+  upload(sc){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(this.p,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(this.smooth(),3));g.setAttribute('color',new THREE.Float32BufferAttribute(this.c.map(lin),3));
+    g.computeBoundingSphere();return mkMesh(g,sc)}
 }
 let dimNow=1;
-function drawMesh(m,model,{tint=[0,0,0],mul=[1,1,1],unlit=0,mode=gl.TRIANGLES,point=1,nodim=false}={}){
-  if(!nodim&&unlit<.5&&dimNow<.999)mul=mul.map(v=>v*dimNow);bindMesh(m);gl.uniformMatrix4fv(U.uModel,false,model);gl.uniform3fv(U.uTint,tint);gl.uniform3fv(U.uMul,mul);gl.uniform1f(U.uUnlit,unlit);gl.uniform1f(U.uPoint,point);gl.drawArrays(mode,0,m.count);
+/* glow > 1 pushes an unlit mesh past white so the bloom pass makes it shine */
+function drawMesh(m,model,{tint=[0,0,0],mul=[1,1,1],unlit=0,glow=1,point=1,nodim=false}={}){
+  if(!nodim&&unlit<.5&&dimNow<.999)mul=mul.map(v=>v*dimNow);
+  m.visible=true;m.matrix.fromArray(model);m.matrixWorldNeedsUpdate=true;
+  if(m.isGroup){m.traverse(o=>{const mt=o.material;if(!o.isMesh||!mt.emissive)return;mt.color.copy(o.userData.base).multiply({r:mul[0],g:mul[1],b:mul[2]});mt.emissive.copy(o.userData.baseE).add({r:tint[0],g:tint[1],b:tint[2]})});return}/* GLB model */
+  const u=m.userData;if(u.std)m.material=unlit>=.5?u.basic||(u.basic=basicMat()):u.std;
+  const mt=m.material,k=unlit>=.5?glow:1;mt.color.setRGB(mul[0]*k,mul[1]*k,mul[2]*k);if(mt.emissive)mt.emissive.setRGB(tint[0],tint[1],tint[2]);if(mt.isPointsMaterial)mt.size=point;
+  if(m.isMesh)m.castShadow=m.receiveShadow=unlit<.5;
 }
+/* growable dynamic buffers: points (petals, snow, stars), lines (rain), meshes (mittens) */
+function dyn(kind,sc){const g=new THREE.BufferGeometry(),m=kind==='pts'?new THREE.Points(g,new THREE.PointsMaterial({vertexColors:true,map:DOT,transparent:true,depthWrite:false,sizeAttenuation:false})):kind==='lines'?new THREE.LineSegments(g,new THREE.LineBasicMaterial({vertexColors:true,transparent:true,opacity:.75})):new THREE.Mesh(g,stdMat());
+  m.cap=0;m.count=0;m.frustumCulled=false;return reg(m,sc)}
+function fillDyn(m,pos,col,nor){const n=pos.length/3,g=m.geometry;
+  if(n>m.cap||!m.cap){m.cap=Math.max(64,n*2);['position','color','normal'].forEach(k=>g.setAttribute(k,new THREE.BufferAttribute(new Float32Array(m.cap*3),3).setUsage(THREE.DynamicDrawUsage)))}
+  g.attributes.position.array.set(pos);const c=g.attributes.color.array;for(let i=0;i<col.length;i++)c[i]=lin(col[i]);if(nor)g.attributes.normal.array.set(nor);
+  ['position','color','normal'].forEach(k=>g.attributes[k].needsUpdate=true);g.setDrawRange(0,n);m.count=n}
 
 /* =========================================================
    2. concert hall + orchestra
@@ -280,6 +380,10 @@ function buildHall(){
   g.box(M4.T(0,.12,.35),1.3,.24,1.1,'#3b2418');
   return g.upload();
 }
+/* mixed skin tones for the Blender musicians (light → dark) */
+const SKIN_GLB=['#f5dcc0','#f2d0b0','#e8b890','#d39c70','#b07a52','#8a5a38','#6b4228','#3e2616'];
+const SUIT=['#141418','#18181e','#101013','#1c1c22'];/* concert black, a hair apart */
+const HAIR_GLB=['#1a1410','#2a1c14','#3b2617','#5a3a22','#7a5230','#a07040','#c9a05a','#e0c890','#9a3e20','#8a8580','#c9c2b8'];
 const SKIN=['#f0c8a0','#d9a47a','#b97c55','#8d5a3b','#f5d6b8'],HAIR=['#2a1c14','#5a3a22','#1a1a1a','#a07040','#c9c2b8','#7a2e1a'];
 function musician(kind,seed){
   const g=new Geo(),sk=SKIN[seed%5],hr=HAIR[(seed*3)%6],suit=seed%4===1?'#1b1b22':'#121216',I=M4.id();
@@ -460,9 +564,9 @@ const SEASONS={
   result:['꽃이 활짝 폈어요! 브라보!','꽃이 반쯤 피었어요','서두르다 꽃이 다 졌어요…'],
   fx:{cols:[[.98,.72,.8],[1,.84,.9],[.95,.6,.74]],rate:()=>{const t=typeAt();return t==null?.1:(t==='stream'?1:.6)*(.4+health*.8)},vy:[.4,.8],size:6}},
  summer:{key:'summer',name:'여름',en:'Summer',
-  names:{wind:'폭풍',birds:'번개',stream:'우박',storm:'천둥',sun:'폭염'},
-  story:'여름이 점점 길어져요(98일 → 118일). 폭풍을 지휘하고, ✕에서 제때 끊어야 여름이 끝나요!',meter:'여름',
-  result:['여름을 제때 끝냈어요!','여름이 조금 길어졌어요','여름이 끝나지 않아요…'],
+  names:{wind:'폭풍',birds:'번개',stream:'우박',storm:'천둥',sun:'소나기'},
+  story:'폭염이 점점 길어져요(여름 98일 → 118일). 폭풍·번개·우박·천둥을 지휘해 쨍쨍한 더위를 몰아내고, ✕에서 제때 끊어 폭염을 끝내요!',meter:'시원함',
+  result:['폭염을 몰아냈어요!','더위가 조금 남았어요','폭염이 끝나지 않아요…'],
   fx:{cols:[[.98,.86,.5]],rate:()=>0,vy:[.2,.4],size:4}},
  autumn:{key:'autumn',name:'가을',en:'Autumn',
   names:{wind:'춤',birds:'자장가',stream:'낙엽',storm:'총소리',sun:'사냥 나팔'},
@@ -543,7 +647,7 @@ Object.assign(SEASONS.winter,{gain:1.4,mv:'1악장 Allegro non molto → 2악장
 /* ---- season sound effects, scheduled in beats like the notes (so they follow the tempo and the pause) ---- */
 /* each season gives every orchestra part one piece of nature (SEASONS.x.names) and that part plays its sound, from where it sits:
    spring  wind=breeze · birds=birdsong · stream=brook · storm=rain & thunder · sun=horn
-   summer  wind=gusts · birds=lightning zap · stream=hail · storm=thunder · sun=cicadas in the heat
+   summer  wind=gusts · birds=lightning zap · stream=hail · storm=thunder · sun=rain shower (cicadas are the heat itself, see updateThreat)
    autumn  wind=dance claps · birds=hiccups · stream=rustling leaves · storm=gunshots · sun=hunt (dogs, hooves)
    winter  wind=shivering breeze · birds=gale · stream=chattering teeth · storm=stamping · sun=fireplace */
 SEASONS.spring.sfx=P=>{
@@ -551,7 +655,7 @@ SEASONS.spring.sfx=P=>{
   [[16,32,1.5],[88,104,2]].forEach(([a,b,st])=>{for(let x=a;x<b;x+=st)P(x+Math.random()*.5,'birds','chirp',{midi:88+Math.floor(Math.random()*8),dur:.2,vol:.05})});
   for(let x=48;x<64;x++)P(x,'stream','brook',{dur:1,vol:.06})};
 SEASONS.summer.sfx=P=>{/* storm: gusts of wind, hail rattling on the roof, far thunder at each new scene */
-  [[20,28],[45,56]].forEach(([a,b])=>{for(let x=a;x<b;x+=4)P(x,'sun','cicada',{dur:3.5,vol:.02})});
+  [[20,28],[45,56]].forEach(([a,b])=>{for(let x=a;x<b;x+=4)P(x,'sun','shower',{dur:3.5,vol:.05})});
   [11,13,15,17,39,41,43].forEach(x=>P(x-.25,'birds','zap',{dur:.2,vol:.08}));
   [[0,10],[20,28],[38,45],[56,67]].forEach(([a,b])=>{for(let x=a;x<b;x+=4)P(x,'birds','gust',{dur:3.5,vol:.14})});
   [[28,38],[45,56]].forEach(([a,b])=>{for(let x=a;x<b;x++)P(x+.5,'stream','hail',{dur:1,vol:.06,fx:10,col:[.92,.95,1]})});
@@ -573,7 +677,7 @@ Object.assign(SEASONS.winter,{accEv:{kind:'stomp',vol:.22,fx:40},sfx:P=>{/* cold
 /* ambience under the whole season (one filtered noise loop) and the wind that blows the particles sideways, per scene */
 const typeAt=()=>state==='play'?(secAt(pos)||{}).type:null;
 Object.assign(SEASONS.spring,{amb:t=>({type:'highpass',freq:2500,vol:t==='storm'?.06:0}),wind:t=>t==='storm'?1.6:.15});
-Object.assign(SEASONS.summer,{amb:()=>({type:'highpass',freq:2500,vol:.07}),wind:()=>1.3});
+Object.assign(SEASONS.summer,{amb:()=>({type:'highpass',freq:2500,vol:.015+.08*Math.max(0,1-threat)}),/* the rain hiss grows as the heat is driven off */wind:()=>1.3});
 Object.assign(SEASONS.autumn,{amb:()=>({type:'bandpass',freq:900,Q:1,vol:.025}),wind:t=>t==='flee'?.9:.35});
 Object.assign(SEASONS.winter,{amb:t=>({type:'bandpass',freq:450,Q:2,vol:t==='blizzard'?.09:t==='fire'?.01:.04}),wind:t=>t==='blizzard'?3:t==='gale'?1.6:.2});
 /* =========================================================
@@ -585,7 +689,7 @@ function twinkleMusic(){const K=kit(),L=[['C5','C5','G5','G5','A5','A5','G5'],['
     harm[i].forEach((c,j)=>{const h=CH[c];K.push(b0+j*2,'wind','bass',{midi:h[0],dur:1.9,vol:.32});K.push(b0+j*2,'wind','soft',{midi:h[1]+12,dur:1.9,vol:.07});K.push(b0+j*2+1,'stream','pluck',{midi:h[2]+24,dur:.5,vol:.12});K.push(b0+j*2+1.5,'stream','pluck',{midi:h[3]+24,dur:.5,vol:.1})});
     if(i%2)K.horn(b0/BPB+1,[60,67],.04)});
   K.push(32,'wind','pad',{midis:[60,64,67,72],dur:3,vol:.06});K.push(32,'wind','bass',{midi:36,dur:3,vol:.3});return K.done()}
-SEASONS.rehearsal={key:'rehearsal',name:'리허설',en:'Rehearsal',mv:'반짝반짝 작은 별',bpm:84,total:35,music:twinkleMusic,
+SEASONS.rehearsal={key:'rehearsal',marks:'lead',name:'리허설',en:'Rehearsal',mv:'반짝반짝 작은 별',bpm:84,total:35,music:twinkleMusic,
   sections:[sc(0,35,'rit','')],
   dyn:[[0,'mf']],
   holds:[[14,2]],accents:[22],both:28,levels:[[6,.95],[8,.06]],focus:[],
@@ -642,9 +746,9 @@ function rehClear(st){const near=b=>Math.abs(b-st.at)<1.6;
   if(st.k==='accent'){const a=accState.find(a=>!a.done&&near(a.b));if(a){a.done=a.hit=true}pop('Rh','Perfect!','#f2d22e','강세')}
   if(st.k==='both'&&bothEv){bothEv.done=true;pop('C','Perfect!','#f2d22e','양손 번쩍')}
   if(st.k==='beat')pop('Rh','Perfect!','#f2d22e','박자')}
-function startRehearsal(){$('intro').hidden=true;REH.on=true;REH.si=0;REH.cnt=0;REH.pause=true;REH.t=0;applySeason('rehearsal');start();rehShow()}
+function startRehearsal(){rehLag=camOn?[]:null;$('intro').hidden=true;REH.on=true;REH.si=0;REH.cnt=0;REH.pause=true;REH.t=0;applySeason('rehearsal');start();rehShow();showChapter('REHEARSAL!!','커튼 뒤에서 · 반짝반짝 작은 별')}
 function endRehearsal(){if(!REH.on)return;REH.on=false;REH.pause=false;$('rehBig').hidden=true;lpToneOn(false);try{localStorage.setItem('leftCal',JSON.stringify(LC))}catch(e){}
-  if(musicBus)musicBus.gain.setTargetAtTime(0,ac.currentTime,.2);state='idle';preShow=true;applySeason('spring');setTimeout(()=>{showSeasonPick();toast('리허설 끝! 이제 지킬 계절을 골라요')},700)}
+  if(musicBus)musicBus.gain.setTargetAtTime(0,ac.currentTime,.2);state='idle';preShow=true;applySeason('spring');setTimeout(()=>{showGreenRoom();grSay('리허설 수고하셨어요! 이제 오늘 밤 지휘할 악보를 골라 주세요.');toast('리허설 끝! 이제 지킬 계절을 골라요')},700)}
 function rehTick(dt,now){if(!REH.on)return;const st=REH_STEPS[REH.si];
   if(!REH.pause&&st&&state==='play'&&pos>=st.at){REH.pause=true;REH.cnt=0;REH.t=0;rehShow()}
   if(!REH.pause||!st)return;const seen=leftH!=null&&now-leftSeen<400;
@@ -668,7 +772,7 @@ const boltMesh=buildBolts();
 let backdrop=BACKDROPS.spring,sunMesh=SUNS.spring;
 let curtain=0;
 /* ---- build meshes ---- */
-const hall=buildHall();
+let hall=buildHall();
 /* audience behind the conductor (rows face the stage, i.e. -z) */
 const audience=[];
 (function(){const CL=['#5a3d7a','#2f4f6f','#7a2e2e','#3f5f3a','#6b5a3a','#2a2a33','#8a6a8f','#405a7a','#9a7040'];let k=3;
@@ -689,27 +793,203 @@ const audience=[];
   audience.push({mesh:w.upload(),row:-1});
 })();
 const actors=[];
-function place(p,partKey,seed){const[x,z]=polar(p.a,p.r);actors.push({mesh:musician(p.kind,seed),x,y:TIER[p.tier].y,z,ry:-p.a*D2R,part:partKey,phase:seed*.7})}
+function place(p,partKey,seed){const[x,z]=polar(p.a,p.r);actors.push({mesh:musician(p.kind,seed),kind:p.kind,seed,x,y:TIER[p.tier].y,z,ry:-p.a*D2R,part:partKey,phase:seed*.7})}
 let seed=1;PARTS.forEach(pt=>pt.players.forEach(p=>place(p,pt.key,seed++)));DECOR.forEach(p=>place(p,null,seed++));
+/* optional Blender models in assets/ (names, sizes and facing: see CLAUDE.md). A missing file or object keeps the built-in Geo mesh. */
+const GLB_L=new GLTFLoader().setDRACOLoader(new DRACOLoader().setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/gltf/'));
+function loadGLB(f,cb){GLB_L.load('assets/'+f,g=>{try{cb(g)}catch(e){console.warn('assets/'+f,e)}},undefined,()=>{})}
+/* ---- 3D green room (assets/greenroom.glb, Blender source assets/greenroom.blend). Its own scene and lights.
+   The mirror is a Reflector whose camera also sees layer 1, where the maestro avatar stands at the player's spot:
+   the main camera never sees him, only his reflection. Three.js coords: the mirror wall is z=+2, the red curtain x=+2.44. ---- */
+const grScene=new THREE.Scene();grScene.background=new THREE.Color(0x050403);
+let grMirror3=null,grAv=null,grAvRest=null,grGlow=null,grHover=null,grPoseCur=null;const grBones={},grPick=[],grChair=[],grCurt=[],grCovers={},grLook={x:0,y:0};
+const GR_GLASS={c:new THREE.Vector3(-1.3,1.42,1.936),w:1.42,h:.8};
+/* seat: on the make-up chair, eyes on the mirror (also the calibration view; the reflection solve uses this eye); desk: head bowed over the scores */
+const GRP={start:{p:[-.6,1.62,-1.6],t:[.38,1.25,1.24],fov:62},mirror:{p:[-1.3,1.42,.6],t:[-1.3,1.47,1.94],fov:50},desk:{p:[-1.34,1.3,1.12],t:[-1.34,.76,1.66],fov:56},deskNear:{p:[-1.34,1.3,1.1],t:[-1.34,.74,1.62],fov:54},seat:{p:[-1.32,1.38,.86],t:[-1.3,1.32,1.94],fov:58},deskTall:{p:[-1.34,1.6,1.02],t:[-1.34,.76,1.66],fov:60},curtain:{p:[1.75,1.62,1.1],t:[2.44,1.35,1.1],fov:60}};
+{grScene.add(new THREE.HemisphereLight(0xfff0e0,0x2a1a10,.3));
+ [[-1.3,1.75,1.7,1.3],[-1.3,1.3,1.85,.5]].forEach(([x,y,z,i])=>{const l=new THREE.PointLight(0xffd9a0,i,5,2);l.position.set(x,y,z);grScene.add(l)});
+ [[.6,2.72,1.2,-1.1,1.2,1.95],[.6,2.72,0,2.45,1,0],[.6,2.72,-1.2,-.5,1,-1.95]].forEach(([x,y,z,tx,ty,tz])=>{const l=new THREE.SpotLight(0xffe2b8,6.5,9,.8,.6,2);l.position.set(x,y,z);l.target.position.set(tx,ty,tz);grScene.add(l,l.target)});
+ const st=new THREE.PointLight(0xffa860,1.1,3,2);st.position.set(2.2,1.2,1.1);grScene.add(st);
+ const pm=new THREE.PMREMGenerator(renderer);grScene.environment=pm.fromScene(new RoomEnvironment(),.04).texture;grScene.environmentIntensity=.15}
+function grTex(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=SRGB;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=4;return t}
+const woodTex=grTex(512,1024,(x,w,h)=>{x.fillStyle='#c48b55';x.fillRect(0,0,w,h);for(let i=0;i<260;i++){const px=Math.random()*w,a=.03+Math.random()*.09;x.strokeStyle=Math.random()<.5?`rgba(120,70,30,${a})`:`rgba(235,175,115,${a})`;x.lineWidth=1+Math.random()*3;x.beginPath();x.moveTo(px,0);for(let y=0;y<=h;y+=32)x.lineTo(px+Math.sin(y/(60+i%40)+i)*3,y);x.stroke()}});
+const carpetTex=grTex(256,256,(x,w,h)=>{x.fillStyle='#86827c';x.fillRect(0,0,w,h);const d=x.getImageData(0,0,w,h);for(let i=0;i<d.data.length;i+=4){const n=(Math.random()-.5)*36;d.data[i]+=n;d.data[i+1]+=n;d.data[i+2]+=n}x.putImageData(d,0,0)});
+/* the GLB has no UVs: project them from world space, per face direction */
+function grUV(m,su,sv){m.updateMatrixWorld(true);const g=m.geometry,P=g.attributes.position,N=g.attributes.normal,v=new THREE.Vector3(),n=new THREE.Vector3(),nm=new THREE.Matrix3().getNormalMatrix(m.matrixWorld),uv=new Float32Array(P.count*2);
+  for(let i=0;i<P.count;i++){v.fromBufferAttribute(P,i).applyMatrix4(m.matrixWorld);n.fromBufferAttribute(N,i).applyMatrix3(nm);const ax=Math.abs(n.x),ay=Math.abs(n.y),az=Math.abs(n.z);
+    let u,w;if(ay>ax&&ay>az){u=v.x;w=v.z}else if(ax>az){u=v.z;w=v.y}else{u=v.x;w=v.y}uv[i*2]=u*su;uv[i*2+1]=w*sv}
+  g.setAttribute('uv',new THREE.BufferAttribute(uv,2))}
+const COVER={reh:['#efe6d2','#3a2a1a','연습 악보','반짝반짝','작은 별','리허설'],spring:['#f3b9c6','#5a1f33','I','봄','La Primavera','이른 더위'],summer:['#ffd25a','#5a3600','II','여름',"L'Estate",'폭염'],autumn:['#d9843e','#3e1a05','III','가을',"L'Autunno",'가뭄'],winter:['#bcd7ec','#1d3550','IV','겨울',"L'Inverno",'녹는 눈']};
+function drawCover(k,stamp){const [bg,ink,a,b,c,d]=COVER[k],cv=grCovers[k]?grCovers[k].canvas:document.createElement('canvas');cv.width=256;cv.height=350;const x=cv.getContext('2d');
+  x.fillStyle=bg;x.fillRect(0,0,256,350);if(k==='reh'){x.strokeStyle='#3a2a1a26';x.lineWidth=1;for(let y=40;y<350;y+=18){x.beginPath();x.moveTo(0,y);x.lineTo(256,y);x.stroke()}}
+  x.strokeStyle=ink+'66';x.lineWidth=3;x.strokeRect(12,12,232,326);x.fillStyle=ink;x.textAlign='left';
+  x.font="800 22px 'Nanum Myeongjo',serif";x.fillText(a,28,52);
+  x.font=`800 ${k==='reh'?46:66}px 'Nanum Myeongjo',serif`;x.fillText(b,28,k==='reh'?122:132);if(k==='reh')x.fillText(c,28,176);else{x.font="italic 22px 'Nanum Myeongjo',serif";x.fillText(c,28,172)}
+  x.font="17px 'Gowun Dodum',sans-serif";x.fillText(k==='reh'?d:'위협 · '+d,28,312);
+  if(stamp!=null){x.save();x.translate(188,246);x.rotate(-.25);x.strokeStyle=x.fillStyle=stamp<=1?'#d1301c':'#6b6152';x.lineWidth=5;x.beginPath();x.arc(0,0,42,0,7);x.stroke();x.font="700 24px Gaegu,cursive";x.textAlign='center';x.fillText(['지켜냄','절반','놓침'][stamp],0,8);x.restore()}
+  return cv}
+const isDesc=(o,a)=>{for(;o;o=o.parent)if(o===a)return true;return false};
+loadGLB('greenroom.glb',g=>{const r=g.scene;grScene.add(r);r.updateMatrixWorld(true);const av=r.getObjectByName('maestro');
+  r.traverse(o=>{if(!o.isMesh)return;const mn=(o.material&&o.material.name)||'';
+    if(av&&isDesc(o,av)){o.layers.set(1);/* flat colours like the 2D maestro (and no blow-out from the mirror bulbs) */o.material=new THREE.MeshBasicMaterial({color:o.material.color});return}
+    if(/^cover_txt_/.test(o.name))o.visible=false;/* old baked cover text; the covers are canvas textures */
+    if(/^curtain_[ab]$/.test(o.name))grCurt.push({o,p0:o.position.clone(),s0:o.scale.clone(),edge:new THREE.Box3().setFromObject(o)[o.name==='curtain_a'?'max':'min'].z});/* the door: each half bunches toward its outer edge */
+    if(/^desk_(top|drawer)$/.test(o.name))grPick.push([o,'desk']);
+    if(/^chair_/.test(o.name)){grChair.push(o);grPick.push([o,'chair'])}
+    if(mn==='gr_plywood'){grUV(o,.8,.34);o.material=new THREE.MeshStandardMaterial({map:woodTex,roughness:.62})}
+    else if(mn==='gr_carpet'){grUV(o,1.4,1.4);o.material=new THREE.MeshStandardMaterial({map:carpetTex,roughness:.95})}
+    else if(mn==='gr_velvet'){o.material=new THREE.MeshPhysicalMaterial({color:new THREE.Color().setRGB(.2,.004,.012),roughness:.85,sheen:1,sheenColor:new THREE.Color(.9,.25,.3),sheenRoughness:.45,side:THREE.DoubleSide});grPick.push([o,'curtain'])}
+    else if(/^gr_(bulb|sign_text|red_lamp)$/.test(mn))o.material.emissiveIntensity=mn==='gr_bulb'?2:3;
+    else if(mn==='gr_stage_glow'){grGlow=o;o.material.emissive.multiplyScalar(.3);grPick.push([o,'curtain'])}
+    if(o.name==='mirror_frame')grPick.push([o,'mirror'])});
+  const g0=r.getObjectByName('gr_glass');if(g0)g0.visible=false;
+  grMirror3=new Reflector(new THREE.PlaneGeometry(GR_GLASS.w,GR_GLASS.h),{textureWidth:1024,textureHeight:576,color:0xa4abb0,clipBias:.003});
+  grMirror3.position.copy(GR_GLASS.c);grMirror3.rotation.y=Math.PI;grMirror3.camera.layers.enable(1);grScene.add(grMirror3);grPick.push([grMirror3,'mirror']);
+  /* the slots in the GLB, left to right as seen from the chair (screen left = larger x), get reh, spring, summer, autumn, winter */
+  const slots=Object.keys(COVER).map(k=>r.getObjectByName('gr_score_'+k)).filter(Boolean).sort((a,b)=>b.getWorldPosition(_gv).x-a.getWorldPosition(_gd).x);
+  Object.keys(COVER).forEach((k,i)=>{const o=slots[i];if(!o)return;o.visible=false;const cv=drawCover(k,null),tex=new THREE.CanvasTexture(cv);tex.colorSpace=SRGB;tex.anisotropy=4;tex.center.set(.5,.5);tex.rotation=Math.PI;
+    const side=new THREE.MeshStandardMaterial({color:COVER[k][0],roughness:.7}),top=new THREE.MeshStandardMaterial({map:tex,roughness:.65,emissive:0xffffff,emissiveMap:tex,emissiveIntensity:0}),
+      m=new THREE.Mesh(new THREE.BoxGeometry(.22,.014,.3),[side,side,top,side,side,side]);o.getWorldPosition(m.position);o.getWorldQuaternion(m.quaternion);grScene.add(m);grCovers[k]={canvas:cv,tex,mesh:m,top,baseY:m.position.y};grPick.push([m,'score:'+k])});
+  /* the five scores lie as one overlapping fan in front of the chair (each card covers the right part of the one before; titles stay visible on the left) */
+  Object.keys(COVER).forEach((k,i)=>{const c=grCovers[k];if(!c)return;const u=i-2,m=c.mesh;m.position.set(-1.34-u*.135,.797+i*.016,1.655+Math.abs(u)*.012);m.rotateY(u*.04);c.baseY=m.position.y;c.home={p:m.position.clone(),q:m.quaternion.clone()}});
+  /* the empty spot a held score leaves in the fan: point (or click) there to put it down */
+  grDrop=new THREE.Mesh(new THREE.BoxGeometry(.22,.004,.3),new THREE.MeshBasicMaterial({color:0xfff6d0,transparent:true,opacity:0,depthWrite:false}));grDrop.position.y=-9;grScene.add(grDrop);grPick.push([grDrop,'drop']);
+  if(av){grAv=av;['upperR','foreR','upperL','foreL','head'].forEach(b=>{let n=null;av.traverse(o=>{if(!n&&o.name==='maestro_'+b&&!o.isMesh)n=o});if(n)grBones[b]={n,rest:n.quaternion.clone()}});grAvRest={p:new THREE.Vector3(GRP.mirror.p[0],GRP.mirror.p[1]-.2-1.27,GRP.mirror.p[2])};av.position.copy(grAvRest.p);av.updateMatrixWorld(true);
+    /* rest shoulders (in his own frame): their width sets his scale, their middle is pinned to the webcam shoulders */
+    if(grBones.upperR&&grBones.upperL){const r=av.worldToLocal(grBones.upperR.n.getWorldPosition(new THREE.Vector3())),l=av.worldToLocal(grBones.upperL.n.getWorldPosition(new THREE.Vector3()));grAvRest.sw=r.distanceTo(l);grAvRest.mid=r.add(l).multiplyScalar(.5)}
+    /* the baton's long axis in the right hand's frame, to keep it pointing forward-up while he beats */
+    const bt=av.getObjectByName('maestro_baton'),fr=grBones.foreR;if(bt&&fr){bt.geometry.computeBoundingBox();const bb=bt.geometry.boundingBox,sz=bb.getSize(new THREE.Vector3()),ax=sz.x>sz.y&&sz.x>sz.z?'x':sz.y>sz.z?'y':'z',far=Math.abs(bb.max[ax])>Math.abs(bb.min[ax])?bb.max[ax]:bb.min[ax],d=new THREE.Vector3();d[ax]=Math.sign(far)||1;
+      d.transformDirection(bt.matrixWorld).applyQuaternion(fr.n.getWorldQuaternion(new THREE.Quaternion()).invert());grAvRest.baton=d}}
+  fillProgram();document.fonts&&document.fonts.ready.then(fillProgram)});
+const _gv=new THREE.Vector3(),_gq=new THREE.Quaternion(),_gq2=new THREE.Quaternion(),_gd=new THREE.Vector3(),_gr=new THREE.Vector3();
+/* point a bone's +Y (Blender bone axis) at a world direction, keeping its rest twist */
+function aimBone(b,dir,k){const n=b.n;n.parent.getWorldQuaternion(_gq).invert();_gd.copy(dir).normalize().applyQuaternion(_gq);_gr.set(0,1,0).applyQuaternion(b.rest);_gq2.setFromUnitVectors(_gr,_gd).multiply(b.rest);n.quaternion.slerp(_gq2,k)}
+/* where a landmark shows on the glass (the mirror view is the mirrored webcam, cover-cropped to 16:9 like the calibration box),
+   and where the avatar must stand so that his reflection lands on it, seen from the mirror camera pose */
+function grAvPt(lm,dz){const vw=video.videoWidth||640,vh=video.videoHeight||480,sc=Math.max(GR_GLASS.w/vw,GR_GLASS.h/vh),gx=GR_GLASS.c.x+(lm.x-.5)*vw*sc,gy=GR_GLASS.c.y+(.5-lm.y)*vh*sc;
+  /* a point at depth z shows in the glass at g when its image (z' = 2*glass - z) lies on the line from the eye through g */
+  const E=GRP.mirror.p,gz=GR_GLASS.c.z,z=E[2]+(dz||0),t=(gz-E[2])/(2*gz-z-E[2]);return new THREE.Vector3(E[0]+(gx-E[0])/t,E[1]+(gy-E[1])/t,z)}
+/* roll the forearm about its own axis so the baton points forward (toward the mirror) and a little up: then a down-up stroke reads as a beat, not a sideways wave */
+const _tw=new THREE.Vector3(),_ta=new THREE.Vector3(),_tf=new THREE.Vector3();
+function twistBaton(fo,k){const d0=grAvRest.baton;if(!d0)return;const q=fo.n.getWorldQuaternion(_gq);_ta.set(0,1,0).applyQuaternion(q);_tw.copy(d0).applyQuaternion(q);
+  _tf.set(0,.45,1).applyQuaternion(grAv.quaternion);/* his forward is +Z of his own frame; checked against the render */
+  _tw.addScaledVector(_ta,-_tw.dot(_ta));_tf.addScaledVector(_ta,-_tf.dot(_ta));if(_tw.lengthSq()<1e-4||_tf.lengthSq()<1e-4)return;_tw.normalize();_tf.normalize();
+  const ang=Math.atan2(_ta.dot(_tw.clone().cross(_tf)),_tw.dot(_tf));fo.n.quaternion.multiply(_gq2.setFromAxisAngle(_gr.set(0,1,0),ang*k));fo.n.updateMatrixWorld(true)}
+function updateAvatar(dt,ts){if(!grAv)return;const Lm=poseLm,k=Math.min(1,dt*10),fresh=camOn&&Lm&&performance.now()-poseSeen<500;
+  if(fresh&&vis(Lm[11])&&vis(Lm[12])&&grAvRest.sw){/* real size: the middle of his shoulder joints sits on the webcam shoulders (so the orange line meets his shoulders);
+     the arms copy the webcam shape at his own length (f = his shoulder width / the webcam one, both solved through the mirror) */
+    const a=grAvPt(Lm[11]),b=grAvPt(Lm[12]),f=grAvRest.sw/(a.distanceTo(b)||1);grAv.scale.setScalar(1);_gv.copy(grAvRest.mid).applyQuaternion(grAv.quaternion);grAv.position.lerp(_gd.copy(a).add(b).multiplyScalar(.5).sub(_gv),k);grAv.updateMatrixWorld(true);
+    [['R',12,14,16],['L',11,13,15]].forEach(([sd,si,ei,wi])=>{const up=grBones['upper'+sd],fo=grBones['fore'+sd];if(!up||!fo||!vis(Lm[ei]))return;
+      const Ps=grAvPt(Lm[si]),Pe=grAvPt(Lm[ei]),d1=Pe.clone().sub(Ps).multiplyScalar(f);d1.z+=.05;aimBone(up,d1,k);up.n.updateMatrixWorld(true);
+      if(!vis(Lm[wi]))return;const d2=grAvPt(Lm[wi]).sub(Pe).multiplyScalar(f);d2.z+=.06;aimBone(fo,d2,k);fo.n.updateMatrixWorld(true);if(sd==='R')twistBaton(fo,k)});
+    const hb=grBones.head;if(hb){_gq.setFromEuler(new THREE.Euler(0,-headYawRaw*.8,Math.atan2(a.y-b.y,a.x-b.x)*.6));_gq2.copy(hb.rest).multiply(_gq);hb.n.quaternion.slerp(_gq2,k)}}
+  else{grAv.position.lerp(grAvRest.p,k*.3);grAv.scale.setScalar(grAv.scale.x+(1-grAv.scale.x)*k*.3);Object.values(grBones).forEach(b=>b.n.quaternion.slerp(b.rest,k*.3))}}
+function placeCalibBox(){const box=document.querySelector('#calib .calib-box');if(!box)return;const c=GR_GLASS.c,hw=GR_GLASS.w/2,hh=GR_GLASS.h/2;let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+  [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([a,b])=>{_gv.set(c.x+a*hw,c.y+b*hh,c.z).project(camera);const X=(_gv.x*.5+.5)*innerWidth,Y=(1-(_gv.y*.5+.5))*innerHeight;x0=Math.min(x0,X);x1=Math.max(x1,X);y0=Math.min(y0,Y);y1=Math.max(y1,Y)});
+  box.style.left=x0+'px';box.style.top=y0+'px';box.style.width=(x1-x0)+'px';box.style.height=(y1-y0)+'px'}
+let grMuf=null,grAmbT=0;
+/* through the wall: the orchestra tuning, muffled */
+function grAmbience(dt){if(!ac||ac.state!=='running')return;if(!grMuf){grMuf=ac.createBiquadFilter();grMuf.type='lowpass';grMuf.frequency.value=520;grMuf.connect(master)}
+  if(master.gain.value<.4){master.gain.cancelScheduledValues(ac.currentTime);master.gain.setTargetAtTime(.8,ac.currentTime,.3)}
+  grAmbT-=dt;if(grAmbT<=0){grAmbT=.5+Math.random()*2;const t=ac.currentTime,m=[57,64,69,52,62,67,72,45][Math.floor(Math.random()*8)];osc(Math.random()<.5?'sawtooth':'triangle',mtof(m),t,.6+Math.random()*1.6,.035,grMuf,{attack:.15,release:.5,cutoff:1600,vib:2})}}
+/* seated: bowing the head (nose drops toward the ears' line, vs. the level taken while facing the mirror) looks down at the scores; the mouse works too and wins for 1.5 s after it moves */
+function grSeatPose(){const d=Math.max(0,Math.min(1,(grLook.y+.1)/.7)),e=d*d*(3-2*d),A=GRP.seat,B=GRP.desk;return{p:A.p.map((v,i)=>v+(B.p[i]-v)*e),t:A.t.map((v,i)=>v+(B.t[i]-v)*e),fov:A.fov+(B.fov-A.fov)*e}}
+function updateGreenRoom(dt,ts){const open=!$('seasonInfo').hidden||!$('rehInfo').hidden,pose=grWalk?'curtain':calibOn?'mirror':open?'deskNear':grStage==='desk'?'desk':'start',P=pose==='desk'?(innerWidth<innerHeight?GRP.deskTall:grSeatPose()):GRP[pose],/* seated: mouse down bows the head to the scores; phones step back so all five fit */lk=pose==='curtain'||pose==='mirror'?0:pose==='start'?.9:.25;
+  grChair.forEach(o=>o.layers[pose==='start'||pose==='curtain'?'enable':'disable'](0));/* the chair would block the close-up views; the mirror still shows it */
+  if(!grPoseCur)grPoseCur={p:new THREE.Vector3(...P.p),t:new THREE.Vector3(...P.t),fov:P.fov};
+  const k=1-Math.exp(-dt*(grWalk?1.7:2.6));grPoseCur.p.lerp(_gv.set(...P.p),k);grPoseCur.t.lerp(_gd.set(P.t[0]-grLook.x*lk,P.t[1]-grLook.y*lk*.4,P.t[2]),k);grPoseCur.fov+=(P.fov-grPoseCur.fov)*k;
+  camera.position.copy(grPoseCur.p);camera.position.y+=Math.sin(ts/1700)*.006;camera.lookAt(grPoseCur.t);camera.aspect=innerWidth/innerHeight;/* keep the landscape width of view on tall (phone) screens */camera.fov=Math.min(100,Math.max(grPoseCur.fov,2*Math.atan(Math.tan(grPoseCur.fov*D2R/2)*1.6/camera.aspect)/D2R));camera.updateProjectionMatrix();camera.updateMatrixWorld();
+  updateAvatar(dt,ts);
+  /* at the desk, until a score is opened, the scores bob one after another to show where to click */
+  const nudge=grStage==='desk'&&!open&&!grWalk&&!grPicked;const kq=Math.min(1,dt*8);if(grDrop&&!grHeld){grDrop.position.y=-9;grDrop.material.opacity=0}Object.entries(grCovers).forEach(([kk,c],i)=>{const m=c.mesh;
+    if(kk===grHeld&&grDrop&&c.home){grDrop.position.copy(c.home.p);grDrop.position.y-=.004;grDrop.quaternion.copy(c.home.q);grDrop.material.opacity=grHover==='drop'?.45:.18+Math.sin(ts/300)*.06}
+    if(kk===grHeld){/* held in the left hand: bottom-left of the view, face turned to you */_gv.set(-.25,-.2,-.6).applyQuaternion(camera.quaternion).add(camera.position);m.position.lerp(_gv,kq);_gq.copy(camera.quaternion).multiply(_gq2.setFromEuler(new THREE.Euler(1.2,Math.PI-.3,-.15)));m.quaternion.slerp(_gq,kq);c.top.emissiveIntensity=.12;return}
+    if(c.home){m.position.x+=(c.home.p.x-m.position.x)*kq;m.position.z+=(c.home.p.z-m.position.z)*kq;m.quaternion.slerp(c.home.q,kq)}
+    const h=grHover==='score:'+kk,ph=(ts/1000%3)-i*.22,w=nudge&&ph>0&&ph<.5?Math.sin(ph/.5*Math.PI):0;c.mesh.position.y+=((c.baseY+(h?.025:w*.02))-c.mesh.position.y)*Math.min(1,dt*10);c.top.emissiveIntensity=h?.16:w*.12});
+  if(grGlow)grGlow.material.emissiveIntensity=1+((!$('seasonInfo').hidden||!$('rehInfo').hidden||grWalk||grHeld||grHover==='curtain')?.7+Math.sin(ts/260)*.3:0);
+  grDoorE+=((grDoorOpen?1:0)-grDoorE)*Math.min(1,dt*2.5);grCurt.forEach(c=>{const s=1-.7*grDoorE*grDoorE*(3-2*grDoorE);c.o.scale.z=c.s0.z*s;c.o.position.z=c.edge+(c.p0.z-c.edge)*s});
+  if(calibOn){placeCalibBox();grSay($('calibTitle').textContent)}
+  updateGrLine(dt,open);grAmbience(dt)}
+/* a fixed dashed shoulder line stays on the glass whenever the camera is on (nothing follows the body; the stage manager does the talking); off for 3 s while seated, the stage manager says so */
+let grLineOff=0,grLineSaid=false;
+function glassRect(){const c=GR_GLASS.c,hw=GR_GLASS.w/2,hh=GR_GLASS.h/2;let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;[[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([a,b])=>{_gv.set(c.x+a*hw,c.y+b*hh,c.z).project(camera);const X=(_gv.x*.5+.5)*innerWidth,Y=(1-(_gv.y*.5+.5))*innerHeight;x0=Math.min(x0,X);x1=Math.max(x1,X);y0=Math.min(y0,Y);y1=Math.max(y1,Y)});return{x0,y0,x1,y1}}
+function updateGrLine(dt,open){const el=$('grLine'),on=camOn&&!grWalk&&!open;if(!on){el.style.display='none';grLineOff=0;return}
+  const r=glassRect();el.style.display='block';el.style.left=r.x0+'px';el.style.top=r.y0+'px';el.style.width=(r.x1-r.x0)+'px';el.style.height=(r.y1-r.y0)+'px';
+  const L=poseLm,fresh=performance.now()-poseSeen<500;let sy=null,ok=false;
+  if(fresh&&L&&vis(L[11])&&vis(L[12])){const A=boxPt(L[11].x,L[11].y,el),B=boxPt(L[12].x,L[12].y,el);sy=(A.y+B.y)/2;ok=Math.abs(sy-SH_LINE.y)<SH_LINE.tol&&Math.abs(A.y-B.y)<SH_LINE.tilt}
+  const watch=!calibOn&&grStage==='desk'&&sy!=null&&grLook.y<.2;/* only while the mirror is in view */grLineOff=watch&&!ok?grLineOff+dt:Math.max(0,grLineOff-dt*2);
+  if(grLineOff>3&&!grLineSaid){grLineSaid=true;grSay(sy>SH_LINE.y?'어깨선이 점선보다 내려갔어요. 허리를 펴고 바르게 앉아 주세요.':sy<SH_LINE.y?'어깨선이 점선보다 올라갔어요. 편하게 내려앉아 주세요.':'어깨를 수평으로 펴 주세요.')}
+  else if(grLineSaid&&ok&&grLineOff<.5){grLineSaid=false;grSay('좋아요, 어깨선이 딱 맞아요! '+GR_PICK_SAY())}}
+const grRay=new THREE.Raycaster(),grNdc=new THREE.Vector2(),GR_TIP={desk:'🪑 화장대에 앉기',drop:'📥 악보 내려놓기',chair:'🪑 의자에 앉기',mirror:'🪞 어깨선 다시 맞추기',curtain:'🎭 무대 입구'};
+function grHit(e){return grHitAt(e.clientX,e.clientY)}
+function grHitAt(cx,cy){if($('intro').hidden||calibOn||!grPick.length)return null;grNdc.set(cx/innerWidth*2-1,-(cy/innerHeight)*2+1);grRay.setFromCamera(grNdc,camera);
+  const h=grRay.intersectObjects(grPick.map(x=>x[0]),false)[0];if(!h)return null;const f=grPick.find(x=>x[0]===h.object);return f?f[1]:null}
+canvas.addEventListener('pointermove',e=>{grLook.x=(e.clientX/innerWidth-.5)*2;grLook.y=(e.clientY/innerHeight-.5)*2;grHover=grHit(e);canvas.style.cursor=grHover?'pointer':'';const tip=$('grTip');
+  if(grHover){const k=grHover.startsWith('score:')&&!(grHeld&&grStage!=='desk')?grHover.slice(6):null;tip.textContent=k?(k==='reh'?'📖 리허설 악보':`📖 ${SEASONS[k].name} 악보`):grHeld&&grStage!=='desk'&&/^(chair|desk|drop|mirror|score:)/.test(grHover)?'📥 악보 내려놓기':GR_TIP[grHover];tip.style.left=e.clientX+'px';tip.style.top=e.clientY+'px';tip.style.display='block'}else tip.style.display='none'});
+canvas.addEventListener('click',e=>{const h=grHit(e);if(h)grAct(h)});
+function grAct(h){$('grTip').style.display='none';if(grDoorOpen)return;if(grHeld&&grStage!=='desk'&&/^(chair|desk|drop|mirror|score:)/.test(h)){grGrab(grHeld);return}/* standing with a score: pointing back at the chair or the desk puts it back */if(h==='chair'&&!grHeld)grSit();else if(h==='mirror')grMirrorAct();else if(h==='curtain')grDoorAct();else if(h==='drop'||(h==='chair'||h==='desk')&&grHeld&&grStage!=='desk'){if(grHeld)grGrab(grHeld)}else if(h==='desk'){if(grStage!=='desk')grSit()}else if(h.startsWith('score:'))grGrab(h.slice(6))}
+/* a score is taken in hand (clicking the held one puts it back); then you stand up facing the red-curtain door */
+let grHeld=null,grDoorOpen=false,grDoorE=0,grDrop=null;
+function grGrab(k){if(!ac)initAudio();ac.resume();$('seasonInfo').hidden=true;$('rehInfo').hidden=true;if(grHeld===k){grHeld=null;grSay('악보를 내려놓았어요. '+GR_PICK_SAY());return}grPicked=true;grHeld=k;if(k==='reh')applySeason('rehearsal');else{preShow=false;applySeason(k)}ding(true);grStage='room';grMirror();grIdleSay()}
+const GR_HELD_SAY=()=>`${grHeld==='reh'?'리허설 「반짝반짝 작은 별」':'「'+SEASONS[grHeld].name+'」'} 악보를 챙겼어요! 이제 빨간 커튼 문을 누르면 열려요. 내려놓으려면 의자나 화장대, 거울을 눌러요.`;
+/* a GLB object as a drawMesh() group; col recolours materials by name; reset drops its own placement (musicians are placed by the game) */
+/* objects named <base>_v0, _v1… are variants (eyes, brows, nose, mouth, hair, extras…): each group picks its own
+   one from a hash of (seed, group name), so the parts mix freely and no two players look alike */
+const hsh=(seed,s)=>{let h=(seed*2654435761)>>>0;for(let i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),16777619)>>>0;return h};
+const rnd=(seed,k)=>hsh(seed,'r'+k)/4294967296;
+function pickVariants(m,seed){const G={};m.traverse(o=>{const k=/^(.*)_v(\d{1,2})$/.exec(o.name);if(k)(G[k[1]]=G[k[1]]||[]).push(o)});
+  Object.entries(G).forEach(([g,L])=>{L.sort((a,b)=>+/_v(\d+)$/.exec(a.name)[1]-+/_v(\d+)$/.exec(b.name)[1]);const s=L[hsh(seed,g)%L.length];L.forEach(o=>o.visible=o===s)})}
+function glbGroup(src,{col={},reset=false,sc=scene,seed=0}={}){const w=new THREE.Group(),m=SkeletonUtils.clone(src);if(reset){m.position.set(0,0,0);m.rotation.set(0,0,0)}w.add(m);pickVariants(m,seed);
+  m.traverse(o=>{if(!o.isMesh)return;o.material=o.material.clone();const k=o.material.name;if(col[k])o.material.color.set(col[k]);o.userData.base=o.material.color.clone();if(o.material.emissive)o.userData.baseE=o.material.emissive.clone();o.castShadow=o.receiveShadow=!(o.material.emissiveIntensity>1);if(o.isSkinnedMesh)o.frustumCulled=false});return reg(w,sc)}
+function swapMesh(old,w){old.parent&&old.parent.remove(old);const i=ALL.indexOf(old);if(i>=0)ALL.splice(i,1);return w}
+loadGLB('musicians.glb',g=>{const SRC={};g.scene.children.forEach(o=>SRC[o.name]=o);const clip=n=>g.animations.find(c=>c.name===n);
+  actors.forEach(a=>{const s=SRC[a.kind];if(!s)return;
+    a.mesh=swapMesh(a.mesh,glbGroup(s,{reset:true,seed:a.seed,col:{skin:SKIN_GLB[hsh(a.seed,'skin')%SKIN_GLB.length],hair:HAIR_GLB[hsh(a.seed,'hairc')%HAIR_GLB.length],suit:SUIT[hsh(a.seed,'suit')%SUIT.length]}}));
+    /* body build and head size differ a little per player */
+    {const m=a.mesh.children[0],r=k=>rnd(a.seed,k),w=.9+.2*r(1);m.scale.set(w,.94+.12*r(2),w);
+      m.traverse(o=>{if(o.isBone&&o.name.startsWith(a.kind+'_head')){const h=.9+.18*r(3);o.scale.set(h*(.95+.1*r(4)),h,h*(.95+.1*r(4)))}})}
+    /* play_<kind> is one beat long and is scrubbed to the beat position; idle_<kind> (or idle) runs freely */
+    const pc=clip('play_'+a.kind),ic=clip('idle_'+a.kind)||clip('idle');if(!pc&&!ic)return;a.mix=new THREE.AnimationMixer(a.mesh);
+    if(pc){a.play=a.mix.clipAction(pc);a.play.timeScale=0;a.play.play()}if(ic){a.idle=a.mix.clipAction(ic);a.idle.play()}})});
+loadGLB('hall.glb',g=>{const h=g.scene.getObjectByName('hall');if(h)hall=swapMesh(hall,glbGroup(h))});
+loadGLB('audience.glb',g=>audience.forEach(a=>{const o=g.scene.getObjectByName(a.row<0?'audience_wall':'audience_row'+a.row);if(o)a.mesh=swapMesh(a.mesh,glbGroup(o))}));
+let BATON=null;const BATON_M=new THREE.Matrix4();
+loadGLB('props.glb',g=>{const b=g.scene.getObjectByName('baton');if(b)BATON=glbGroup(b,{reset:true,sc:ovScene})});
+/* pop-up book backdrops: assets/backdrops.glb holds bd_<season> in world position. Children may carry custom properties
+   (glTF extras → userData): anim = drift|fly|run|bob|hop|sway|slide|flow|rise|dance|bloom, speed, amp, phase, idx (bloom order) */
+loadGLB('backdrops.glb',g=>Object.keys(BACKDROPS).forEach(k=>{const o=g.scene.getObjectByName('bd_'+k);if(!o)return;
+  const w=glbGroup(o),A=[],BL=[];
+  w.traverse(c=>{const u=c.userData;if(!u.anim)return;const e={o:c,a:u.anim,sp:u.speed||1,am:u.amp||.1,ph:u.phase!=null?u.phase:c.position.x*1.7+c.position.y,p:c.position.clone(),r:c.rotation.z,s:c.scale.clone(),v:0,i:u.idx||0};(u.anim==='bloom'?BL:A).push(e)});
+  BL.sort((a,b)=>a.i-b.i);w.userData.anims=A;w.userData.blooms=BL;
+  const was=backdrop===BACKDROPS[k];BACKDROPS[k]=swapMesh(BACKDROPS[k],w);if(was)backdrop=BACKDROPS[k]}));
+const wrapX=x=>-7.5+((x+7.5)%15+15)%15,fr=x=>(x%1+1)%1;
+function animBackdrop(bd,t){const A=bd.userData.anims;if(!A)return;const wd=1+Math.abs(windNow())*.6,bt=state==='play'?hearPos():t*1.5;
+  A.forEach(e=>{const o=e.o,p=e.p,ph=e.ph,s=e.sp,m=e.am;switch(e.a){
+    case 'drift':o.position.x=wrapX(p.x+s*t);break;
+    case 'fly':o.position.x=wrapX(p.x+s*t);o.position.y=p.y+m*Math.sin(t*3+ph);break;
+    case 'run':o.position.x=wrapX(p.x+s*t);o.position.y=p.y+m*Math.abs(Math.sin(t*8+ph));break;
+    case 'bob':o.position.y=p.y+m*Math.sin(t*s*2+ph);break;
+    case 'hop':o.position.y=p.y+m*Math.abs(Math.sin(t*s*4+ph));break;
+    case 'sway':o.rotation.z=e.r+m*wd*Math.sin(t*s+ph);break;
+    case 'slide':o.position.x=p.x+m*Math.sin(t*s+ph);break;
+    case 'flow':o.position.x=p.x+fr(t*s+ph)*m;break;
+    case 'rise':{const f=fr(t*s+ph);o.position.y=p.y+f*m;o.scale.copy(e.s).multiplyScalar(.5+f);break}
+    case 'dance':o.position.y=p.y+m*Math.abs(Math.sin(bt*Math.PI+ph));o.rotation.z=e.r+.15*Math.sin(bt*Math.PI+ph);break}})}
 PARTS.forEach(pt=>{const p=pt.players,ax=p.reduce((s,q)=>s+polar(q.a,q.r)[0],0)/p.length,az=p.reduce((s,q)=>s+polar(q.a,q.r)[1],0)/p.length,ty=TIER[p[0].tier].y;
   pt.center=[ax,ty,az];pt.pulse=0;const g=new Geo();const rr=pt.key==='wind'?1.7:pt.key==='birds'?1.9:1.3;g.ring(ax,ty+.02,az,rr,rr+.09,48);pt.ring=g.upload()});
 
 /* particles: rain lines & petals */
 const windNow=()=>state==='play'&&SEASON.wind?SEASON.wind(typeAt()):0;
-const nearBuf={p:gl.createBuffer(),n:gl.createBuffer(),c:gl.createBuffer(),count:0};
-const rainBuf={p:gl.createBuffer(),n:gl.createBuffer(),c:gl.createBuffer(),count:0},petalBuf={p:gl.createBuffer(),n:gl.createBuffer(),c:gl.createBuffer(),count:0};
+const nearBuf=dyn('pts');
+const rainBuf=dyn('lines'),petalBuf=dyn('pts');
 /* fairy-light stars floating in the darkened hall while the curtain stays closed */
 const HALL_STARS=Array.from({length:46},(_,i)=>{const a=(-80+((i*37)%160))*Math.PI/180,r=3+((i*53)%60)/10;return [Math.sin(a)*r,3.6+((i*31)%34)/10,-Math.cos(a)*r]});
-let drops=[],petals=[];const starBuf={p:gl.createBuffer(),n:gl.createBuffer(),c:gl.createBuffer(),count:0};
+let drops=[],petals=[];const starBuf=dyn('pts');
 /* about a third fall right in front of the camera, drawn bigger, so the weather passes across your view */
 function spawnFx(burst){const f=SEASON.fx,c=f.cols[Math.floor(Math.random()*f.cols.length)];if(!burst&&Math.random()<.3){petals.push({x:(Math.random()-.5)*5-windNow()*.6,y:4.5,z:-1+Math.random()*2,vx:.2+Math.random()*.3,vy:f.vy[0]+Math.random()*(f.vy[1]-f.vy[0]),ph:Math.random()*6,c,big:true});return}
   petals.push({x:(Math.random()-.5)*14,y:burst?3+Math.random()*3:6,z:-1-Math.random()*8,vx:.3+Math.random()*.4,vy:f.vy[0]+Math.random()*(f.vy[1]-f.vy[0])*(burst?2:1),ph:Math.random()*6,c})}
 /* a handful of particles at once; col overrides the season's colours (hail, embers) */
 function burst(n,col){for(let i=0;i<n;i++){spawnFx(true);if(col)petals[petals.length-1].c=col}}
-function fillDyn(buf,pos,col){const n=new Float32Array(pos.length);for(let i=1;i<n.length;i+=3)n[i]=1;
-  gl.bindBuffer(gl.ARRAY_BUFFER,buf.p);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(pos),gl.DYNAMIC_DRAW);
-  gl.bindBuffer(gl.ARRAY_BUFFER,buf.n);gl.bufferData(gl.ARRAY_BUFFER,n,gl.DYNAMIC_DRAW);
-  gl.bindBuffer(gl.ARRAY_BUFFER,buf.c);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(col),gl.DYNAMIC_DRAW);buf.count=pos.length/3}
 
 /* =========================================================
    4. audio
@@ -764,6 +1044,7 @@ function play(e,t,spb){
     /* ---- season sound effects (summer, autumn, winter) ---- */
     case 'gust':{const s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();s.buffer=noiseBuf;s.loop=true;f.type='bandpass';f.Q.value=2.5;f.frequency.setValueAtTime(280,t);f.frequency.linearRampToValueAtTime(650+Math.random()*550,t+dur*.45);f.frequency.linearRampToValueAtTime(240,t+dur);
       g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(e.vol,t+dur*.4);g.gain.linearRampToValueAtTime(0,t+dur);s.connect(f);f.connect(g);g.connect(dest);s.start(t,Math.random());s.stop(t+dur+.05);break}
+    case 'shower':tick(t,e.vol*.6,dest,3200,dur*.9,'bandpass');for(let i=0;i<30;i++)tick(t+Math.random()*dur,e.vol*(.2+Math.random()*.5),dest,6000+Math.random()*3000,.012);break;
     case 'hail':for(let i=0;i<8;i++)tick(t+Math.random()*dur,e.vol*(.4+Math.random()*.6),dest,5000,.015);break;
     case 'clap':[0,.01,.022].forEach(d=>tick(t+d,e.vol,dest,1200,.04,'bandpass'));tick(t+.03,e.vol*.8,dest,1100,.12,'bandpass');break;
     case 'hiccup':{const o=osc('sine',mtof(70),t,.1,e.vol,dest,{attack:.005,release:.05});o.frequency.exponentialRampToValueAtTime(mtof(80),t+.08);break}
@@ -794,11 +1075,20 @@ let cbHold=false,stops=0,conductTime=0,state='idle',events=[],evIdx=0,pos=-8,bpm
 let beats=[],lastBeatAt=-1e9,hits={perfect:0,good:0,miss:0},flash=0;
 let yaw=0,yawTarget=0,gaze=null,headSeen=0,batonTip=null,batonDip=0;
 const secPerBeat=()=>60/bpm;
+/* the beat as it is heard: speakers play ac.outputLatency later (Bluetooth ~.2 s). The stand, the players, the dancing backdrop
+   and the judging use this, so they line up with the sound and with the lag measured against heard clicks in calibration step 4 */
+const hearPos=()=>state==='play'&&ac?pos-(ac.outputLatency||ac.baseLatency||0)/secPerBeat():pos;
+/* beats that want a right-hand stroke: SEASON.marks names a note kind (rehearsal: 'lead' = the melody), so long notes are rests
+   for the hand; null = every beat */
+let beatMarks=null;const needBeat=b=>!beatMarks||beatMarks.has(b);
+let rehLag=null;/* rehearsal: raw stroke delays (s) until the camera lag is set */
+let offHist=[];/* recent stroke offsets {fr (beats, - = early), t} for the stand marks and the average */
+const offAvg=()=>{const a=offHist.slice(-8);return a.length>=3?a.reduce((x,o)=>x+o.fr,0)/a.length*secPerBeat():null};
 
 function conductorBPM(){if(performance.now()-lastBeatAt>2300||beats.length<2)return null;const iv=[];for(let i=1;i<beats.length;i++)iv.push(beats[i]-beats[i-1]);iv.sort((a,b)=>a-b);return Math.max(50,Math.min(180,60000/iv[Math.floor(iv.length/2)]))}
 let toastText='';function toast(t){if(t!==toastText){toastText=t;$('toast').textContent=t}}
 let pops=[],health=.6,combo=0,maxCombo=0,comboAt=0;
-function pop(lane,txt,col,sub){if(REH.on&&txt==='Miss')return;pops.push({lane,txt,col,sub,t:performance.now()});if(state!=='play')return;
+function pop(lane,txt,col,sub){if(REH.on&&txt==='Miss')return;pops.push({lane,txt,col,sub,t:performance.now()});if(state!=='play')return;if(fwin){if(txt==='Miss')fwin.miss++;else if(txt==='Perfect!'||txt==='Good!')fwin.hits++}
   const big=txt==='쾅!'||txt==='브라보!';
   if(txt==='Perfect!'||txt==='Good!'||big){combo++;comboAt=performance.now();maxCombo=Math.max(maxCombo,combo);points+=Math.min(4,Math.floor(combo/10))*5;
     health=Math.min(1,health+(big?.05:txt==='Perfect!'?.022:.01))}
@@ -813,8 +1103,11 @@ function beat(){
   if(state==='ready'&&ac){const t=ac.currentTime,c=SEASON.key==='rehearsal'?[48,55,60,64]:[52,59,64,68];c.forEach((m,i)=>osc('triangle',mtof(m),t,.35,.05,musicBus,{attack:.005,release:.4,cutoff:2200}))}
   if(state!=='play')return;
   /* camera strokes arrive late; take off the delay measured in the timing check (0.1 s until it has been measured) */
-  const lagB=camOn?(TUNE.lag??.1)/secPerBeat():0,pj=pos-lagB,fr=pj-Math.round(pj);
-  judgedBeats.add(Math.round(pj));
+  const lagB=camOn?(TUNE.lag??.1)/secPerBeat():0,pj=hearPos()-lagB,tb=Math.round(pj);if(!needBeat(tb))return;/* a stroke on a rest beat is free: no judgement, no miss */
+  const fr=pj-tb;offHist.push({fr,t:now});if(offHist.length>16)offHist.shift();
+  /* the timing check now happens inside the rehearsal: the median delay of its first strokes (warm-up skipped) becomes TUNE.lag */
+  if(rehLag&&camOn&&state==='play'){const off=fr*secPerBeat();if(Math.abs(off)<.35){rehLag.push(off+(TUNE.lag??.1));if(rehLag.length>=10){TUNE.lag=Math.max(0,Math.min(.45,median(rehLag.slice(2))));saveTune();rehLag=null;cue(`🎯 박자 타이밍을 맞췄어요 · 카메라 지연 ${TUNE.lag.toFixed(2)}초`);setTimeout(()=>cue(''),2600)}}}
+  judgedBeats.add(tb);
   const iv=[];for(let i=1;i<beats.length;i++)iv.push(beats[i]-beats[i-1]);const m=iv.reduce((a,b)=>a+b,0)/(iv.length||1),cv=iv.length>=3?Math.sqrt(iv.reduce((a,b)=>a+(b-m)**2,0)/iv.length)/m:1,steady=cv<.08?'Steady Beat':'';
   const rush=SEASON.key==='spring'&&!REH.on&&fr<-.16;/* spring comes 17 days early: beating ahead of time makes the flowers fall */
   if(Math.abs(fr)<.16){hits.perfect++;points+=20;pop('Rh','Perfect!','#f2d22e',steady)}else if(Math.abs(fr)<.3){hits.good++;points+=10;pop('Rh','Good!','#9fe07a',rush?'서두르지 마':steady)}else{hits.miss++;pop('Rh','Miss','#ff8a6b',rush?'서두르지 마':'')}
@@ -830,6 +1123,7 @@ window.addEventListener('pointermove',e=>{if(yawLocked)return;if(!camOn||perform
 canvas.addEventListener('pointerdown',()=>{if(state==='bow'){bowAction();return}beat()});
 window.addEventListener('keydown',e=>{
   if(calibOn&&calibStep===4&&(e.code==='Enter'||e.code==='KeyJ'||e.code==='KeyF')){e.preventDefault();if(!e.repeat)practiceGesture(e.code==='KeyF'?'accent':'beat',.5);return}
+  if(state==='preshow'){if(['Enter','Space','ArrowDown','KeyS','KeyJ','KeyB'].includes(e.code)){e.preventDefault();if(!e.repeat)psKey()}return}
   if(state==='bow'&&['Space','Enter','ArrowDown','KeyS','KeyA','KeyD','ArrowLeft','ArrowRight'].includes(e.code)){e.preventDefault();if(!e.repeat){if(bowStep==='turn')turnToAudience(['KeyA','ArrowLeft'].includes(e.code)?-1:1);else if(bowStep==='bow'&&['Space','Enter','ArrowDown','KeyS'].includes(e.code))doBow()}return}
   if(e.code==='Space'){e.preventDefault();if(!e.repeat&&!calibOn)togglePause();return}
   if(paused)return;
@@ -856,7 +1150,7 @@ let leftH=null,vol=null,leftSeen=0,leftX=null,leftPts=null,rightPts=null,baseAmp
 const clamp01=v=>Math.max(0,Math.min(1,v));
 let lastBoth=0;
 let lh={p:null,t:0,vy:0,sp:0,still:0,holding:false,lastCut:0};
-let rh={p:null,t:0,vx:0,vy:0,amps:[],still:0,holding:false,speeds:[],smooth:null,phase:null,minY:0,maxY:0,top:0};
+let rh={p:null,t:0,vx:0,vy:0,amps:[],still:0,holding:false,speeds:[],smooth:null,phase:null,minY:0,maxY:0,top:0,skipUntil:0};
 function onPose(res){
   const L=res.poseLandmarks;poseLm=L||null;if(!L)return;const t=performance.now(),a=aspectV();poseSeen=t;
   const sL=L[11],sR=L[12],shOk=vis(sL)&&vis(sR);
@@ -892,8 +1186,10 @@ function processRight(r,t){
     /* a beat = the wrist goes down then turns back up (by position, so slow tracking still works) */
     const eps=.05*scale;if(rh.phase==null){rh.phase='up';rh.minY=pc.y;rh.maxY=pc.y}
     let amp=null;
-    if(rh.phase==='up'){if(pc.y<rh.minY)rh.minY=pc.y;else if(pc.y>rh.minY+eps){rh.phase='down';rh.top=rh.minY;rh.maxY=pc.y}}
-    else{if(pc.y>rh.maxY)rh.maxY=pc.y;else if(pc.y<rh.maxY-eps){amp=(rh.maxY-rh.top)/scale;rh.phase='up';rh.minY=pc.y}}
+    if(rh.phase==='up'){if(pc.y<rh.minY)rh.minY=pc.y;else if(pc.y>rh.minY+eps){rh.phase='down';rh.top=rh.minY;rh.maxY=pc.y;
+      /* waiting for the downbeat: start the music the moment the hand drops, not at the bottom of the stroke */
+      if(state==='ready'&&!paused&&!calibOn&&!(REH.on&&REH.pause)&&rh.vy>1.2&&t>rh.skipUntil){rh.skipUntil=t+450;onGesture('beat',.5)}}}
+    else{if(pc.y>rh.maxY)rh.maxY=pc.y;else if(pc.y<rh.maxY-eps){amp=t<rh.skipUntil?null:(rh.maxY-rh.top)/scale;rh.phase='up';rh.minY=pc.y}}
     if(amp!=null&&amp>TUNE.beatAmp){const ref=baseAmp||(rh.amps.length>=3?rh.amps.slice().sort((x,y)=>x-y)[rh.amps.length>>1]:.35);
       rh.amps.push(amp);if(rh.amps.length>8)rh.amps.shift();onGesture(amp>ref*1.6&&amp>.45?'accent':'beat',amp)}
     if(sp<TUNE.holdSpeed){rh.still+=dt;if(rh.still>=TUNE.holdTime&&!rh.holding){rh.holding=true;onGesture('hold')}}else{rh.still=0;rh.holding=false}
@@ -909,7 +1205,7 @@ async function camLoop(){
   const n=performance.now();if(n-camFpsT>1000){camFps=camFrames;camFrames=0;camFpsT=n;
     /* a slow computer: switch once to the lighter pose model; more frames per second catches fast strokes better */
     if(!liteModel&&camFps>0&&camFps<18&&n-camStartAt>5000){liteModel=true;pose.setOptions({modelComplexity:0,smoothLandmarks:true,enableSegmentation:false,minDetectionConfidence:.5,minTrackingConfidence:.5})}}
-  if(!calibOn){const ok=t=>n-t<700?'✓':'✗';$('camState').textContent=camErr||`왼손 ${ok(leftSeen)} · 오른손 ${ok(handSeen)} · ${camFps}fps${liteModel?' · 가벼운 모드':''}${TUNE.lag!=null?` · 지연 ${TUNE.lag.toFixed(2)}초`:''}`}
+  if(!calibOn){const ok=t=>n-t<700?'✓':'✗';$('camState').textContent=camErr||`왼손 ${ok(leftSeen)} · 오른손 ${ok(handSeen)} · ${camFps}fps${liteModel?' · 가벼운 모드':''}${TUNE.lag!=null?` · 지연 ${TUNE.lag.toFixed(2)}초`:''}${(m=>m==null||state!=='play'?'':Math.abs(m)<.03?' · 박자 딱 맞음':` · 평균 ${Math.abs(m).toFixed(2)}초 ${m<0?'빠르게':'늦게'}`)(offAvg())}`}
   requestAnimationFrame(camLoop);
 }
 async function startCam(){
@@ -929,7 +1225,7 @@ function stopCam(){camOn=false;if(stream)stream.getTracks().forEach(t=>t.stop())
 $('camBtn').addEventListener('click',()=>camOn?stopCam():startCam());
 
 /* ---- what each gesture does in the game ---- */
-function accentHit(){if(state!=='play')return;const a=accState.find(a=>!a.done&&Math.abs(a.b-pos)<.6);if(!a){if(REH.on){flash=1;noiseHit(ac.currentTime,.9,.45,partGain.storm||master,160);pop('Rh','쾅!','#ff9d1a','강세')}return}a.done=a.hit=true;gStats.accent++;points+=50;pop('Rh','쾅!','#ff9d1a','강세');flash=1.2;noiseHit(ac.currentTime,2,.8,partGain.storm,160);judge('쾅! 강세','#f7ff8a')}
+function accentHit(){if(state!=='play')return;const hp=hearPos(),a=accState.find(a=>!a.done&&Math.abs(a.b-hp)<.6);if(!a){if(REH.on){flash=1;noiseHit(ac.currentTime,.9,.45,partGain.storm||master,160);pop('Rh','쾅!','#ff9d1a','강세')}return}a.done=a.hit=true;gStats.accent++;points+=50;pop('Rh','쾅!','#ff9d1a','강세');flash=1.2;noiseHit(ac.currentTime,2,.8,partGain.storm,160);judge('쾅! 강세','#f7ff8a')}
 let bothEv=null,levelEvents=[];
 function buildLevels(){levelEvents=[];if(SEASON.levels){levelEvents=SEASON.levels.map(([b,v])=>({b,v,done:false}));return}const total=TOTAL_BARS*BPB,busy=b=>holdEvents.some(e=>b>=e.b0-1&&b<=e.b1+1)||cutEvents.some(e=>Math.abs(e.b-b)<1.5)||dynEvents.some(e=>Math.abs(e.b-b)<1.5)||(bothEv&&Math.abs(bothEv.b-b)<2);
   for(let b=2;b<total-2;b++){const wave=!!waveSec(b),step=wave?1:2;if((b%step)!==0||busy(b))continue;levelEvents.push({b,v:dynTarget(b),done:false})}}
@@ -938,7 +1234,7 @@ function buildAccents(){const acc=SEASON.accents.slice();bothEv={b:SEASON.both,d
 function bothHit(){if(state==='play'&&REH.on&&(!bothEv||bothEv.done||Math.abs(bothEv.b-pos)>1.2)){pop('C','브라보!','#f2d22e','양손 번쩍');applause(1.6);PARTS.forEach(p=>p.pulse=1);return}
   if(state!=='play'||!bothEv||bothEv.done||Math.abs(bothEv.b-pos)>1.2)return;bothEv.done=true;points+=60;pop('C','브라보!','#f2d22e','양손 번쩍');flash=.6;
   musicBus.gain.cancelScheduledValues(ac.currentTime);musicBus.gain.setTargetAtTime(1.25,ac.currentTime,.05);PARTS.forEach(p=>p.pulse=1)}
-function cutHit(){if(state!=='play')return;const e=cutEvents.find(e=>!e.done&&Math.abs(e.b-pos)<.75);if(!e){if(REH.on){musicBus.gain.cancelScheduledValues(ac.currentTime);musicBus.gain.setTargetAtTime(.05,ac.currentTime,.03);musicBus.gain.setTargetAtTime(1,ac.currentTime+.45,.1);cutDipUntil=performance.now()+550;pop('Lh','딱!','#ff9df0','끊기')}return}e.done=true;e.hitOk=true;const d=Math.abs(e.b-pos);
+function cutHit(){if(state!=='play')return;const hp=hearPos(),e=cutEvents.find(e=>!e.done&&Math.abs(e.b-hp)<.75);if(!e){if(REH.on){musicBus.gain.cancelScheduledValues(ac.currentTime);musicBus.gain.setTargetAtTime(.05,ac.currentTime,.03);musicBus.gain.setTargetAtTime(1,ac.currentTime+.45,.1);cutDipUntil=performance.now()+550;pop('Lh','딱!','#ff9df0','끊기')}return}e.done=true;e.hitOk=true;const d=Math.abs(e.b-pos);
   points+=d<.35?50:25;pop('Lh',d<.35?'Perfect!':'Good!',d<.35?'#f2d22e':'#9fe07a','끊기');
   musicBus.gain.cancelScheduledValues(ac.currentTime);musicBus.gain.setTargetAtTime(.08,ac.currentTime,.03);musicBus.gain.setTargetAtTime(1,ac.currentTime+.35,.08);cutDipUntil=performance.now()+450;
   if(e.b>=CUT-1){if(REH.on)return;gStats.cutoff=true;beginBow()}}
@@ -965,6 +1261,7 @@ function dynTarget(b){const ws=waveSec(b);if(ws)return .34+.2*Math.sin((b-ws.fro
 let accState=[],gStats={accent:0,accentTot:4,hold:0,holdTot:0,cutoff:false,dynIn:0,dynTot:0,legIn:0,legTot:0};
 function onGesture(g,amp){
   if(paused)return;
+  if(state==='preshow'){psGesture(g);return}
   if(state==='bow'){if(bowStep==='turn')turnToAudience(yaw<0?-1:1);else if(bowStep==='bow')doBow();return}
   if(window.__glog)window.__glog.push([g,+(amp||0).toFixed(2),Math.round(pos*100)/100]);
   if(calibOn){if(calibStep===4)practiceGesture(g,amp);else if(calibStep===3&&g==='cut')practiceCut();return}
@@ -977,16 +1274,17 @@ function onGesture(g,amp){
 
 /* ---- flow ---- */
 function reset(){
-  yawLocked=false;bowStep=null;bowAmt=0;clap=0;yawTarget=yaw=0;health=.6;combo=0;maxCombo=0;
+  yawLocked=false;bowStep=null;bowAmt=0;clap=0;ovation=0;yawTarget=yaw=0;ps=null;threat=0;tPush=0;saves=0;fwin=null;natureMsg=null;camX=camZ=0;health=.6;combo=0;maxCombo=0;
   events=buildEvents();evIdx=0;pos=-8;nextClick=-8;bpm=TARGET;beats=[];lastBeatAt=-1e9;hits={perfect:0,good:0,miss:0};
   accState=[];gStats={accent:0,accentTot:4,hold:0,holdTot:0,cutoff:false,dynIn:0,dynTot:0,legIn:0,legTot:0};
   if(musicBus)musicBus.gain.cancelScheduledValues(0);
 }
-function start(){
+function start(skipPre){
   applySeason(SEASON.key);if(!ac)initAudio();ac.resume();
   PARTS.forEach(p=>partGain[p.key].gain.setValueAtTime(1,ac.currentTime));
   master.gain.cancelScheduledValues(ac.currentTime);master.gain.setValueAtTime(.8,ac.currentTime);
-  reset();buildDynEvents();buildPhraseEvents();buildAccents();buildLevels();judgedBeats=new Set();points=0;nextClick=0;pos=0;state='ready';stops=0;conductTime=0;$('intro').hidden=true;$('result').hidden=true;
+  reset();buildDynEvents();buildPhraseEvents();buildAccents();buildLevels();beatMarks=SEASON.marks?new Set(events.filter(e=>e.kind===SEASON.marks).map(e=>Math.round(e.beat))):null;judgedBeats=new Set();points=0;nextClick=0;pos=0;state='ready';rh.phase=null;rh.skipUntil=0;stops=0;conductTime=0;$('intro').hidden=true;$('result').hidden=true;
+  if(!REH.on&&SEASON.key!=='rehearsal'&&skipPre!==true){beginPreshow();return}
   toast(REH.on?'오른손을 위아래로 저어 보세요 · 저을 때마다 소리가 나요':`오른손으로 박자를 저으면 커튼이 열리고 ${SEASON.name}이 시작돼요`);
 }
 /* ---- pause: freezing the AudioContext freezes every scheduled note and the music clock together ---- */
@@ -996,36 +1294,56 @@ function togglePause(on=!paused){if(on&&!(state==='ready'||state==='play'))retur
   if(on){if(ac)ac.suspend()}else{if(ac)ac.resume();lastBeatAt=performance.now();beats=[];$('resumeBtn').blur()}}
 function backToSeasons(){if(paused)togglePause(false);if(ac){ac.resume();[master,musicBus,ambGain].forEach(g=>{g.gain.cancelScheduledValues(ac.currentTime);g.gain.setTargetAtTime(0,ac.currentTime,.05)})}
   if(calibOn){alignOnly=false;startAfterCalib=false;stopMetro();calibOn=false;$('calib').hidden=true;$('calib').classList.remove('mini','step3')}
-  REH.on=false;REH.pause=false;$('rehBig').hidden=true;lpToneOn(false);bowStep=null;yawLocked=false;yawTarget=0;preShow=true;applySeason('spring');showSeasonPick()}
+  REH.on=false;REH.pause=false;$('rehBig').hidden=true;lpToneOn(false);bowStep=null;ps=null;fin=null;$('cert').hidden=true;camX=camZ=0;clap=0;cue('');yawLocked=false;yawTarget=0;preShow=true;applySeason('spring');showSeasonPick()}
 $('pauseBtn').addEventListener('click',()=>togglePause());$('resumeBtn').addEventListener('click',()=>togglePause(false));
-$('restartBtn').addEventListener('click',()=>{togglePause(false);if(REH.on){REH.si=0;REH.cnt=0;REH.pause=true;REH.t=0;start();rehShow()}else start()});
+$('restartBtn').addEventListener('click',()=>{togglePause(false);if(REH.on){REH.si=0;REH.cnt=0;REH.pause=true;REH.t=0;start();rehShow()}else start(true)});
 $('pauseSeason').addEventListener('click',backToSeasons);$('seasonBtn').addEventListener('click',backToSeasons);
-document.querySelectorAll('.season').forEach(b=>b.addEventListener('click',()=>{
-  preShow=false;applySeason(b.dataset.s);$('seasonPick').hidden=true;$('seasonInfo').hidden=false;$('introCam').focus()}));
-$('backSeason').addEventListener('click',()=>{$('seasonInfo').hidden=true;$('seasonPick').hidden=false});
+function chooseSeason(k){if(!ac)initAudio();ac.resume();grStage='desk';grMirror();
+  preShow=false;applySeason(k);$('introCam').textContent=camOn||grNoCam?'🚪 무대로 가기':'📷 거울 세팅하고 무대로';$('rehInfo').hidden=true;$('seasonInfo').hidden=false;grSay(`${SEASON.name} 악보예요. 준비되면 빨간 커튼(무대 입구)으로!`);$('introCam').focus()}
+$('backSeason').addEventListener('click',()=>{$('seasonInfo').hidden=true;grIdleSay()});
 $('startBtn').addEventListener('click',start);
-$('againBtn').addEventListener('click',start);$('otherSeason').addEventListener('click',()=>{$('result').hidden=true;state='idle';curtain=0;$('intro').hidden=false;$('seasonInfo').hidden=true;$('seasonPick').hidden=false});
-$('introCam').addEventListener('click',async()=>{if(camOn){start();return}startAfterCalib=true;await startCam();if(!camOn)startAfterCalib=false});
+$('againBtn').addEventListener('click',start);$('otherSeason').addEventListener('click',backToSeasons);
+$('introCam').addEventListener('click',async()=>{if(camOn||grNoCam){goStage(()=>start());return}startAfterCalib=true;await startCam();if(!camOn)startAfterCalib=false});
 let alignOnly=false;
-$('rehGo').addEventListener('click',async()=>{if(camOn){alignOnly=true;openCalib();return}alignOnly=true;await startCam();if(!camOn){alignOnly=false;$('camErr0').hidden=false;$('camErr0').textContent='웹캠을 켤 수 없어요. 크롬에서 카메라를 허용해 주세요.'}});
-$('rehNo').addEventListener('click',()=>{$('rehStart').hidden=true;$('seasonPick').hidden=false});
-function showSeasonPick(){state='idle';curtain=0;$('result').hidden=true;$('intro').hidden=false;$('rehStart').hidden=true;$('seasonInfo').hidden=true;$('seasonPick').hidden=false;
-  if(camOn){$('introCam').textContent='▶ 공연 시작';}}
+/* ---- green room UI: stage manager's line, the mirror, opening a score, the walk through the red curtain ---- */
+let grNoCam=false,grWalk=false,grStage='room',grPicked=false;
+function fillProgram(){const st=loadStamps();let n=0;['spring','summer','autumn','winter'].forEach(k=>{const t=st[k];if(t!=null&&t<=1)n++;const c=grCovers[k];if(c){drawCover(k,t);c.tex.needsUpdate=true}});
+  $('finaleBtn2').hidden=n<4;$('pgCount').textContent=n?`${n} / 4 계절을 지켰어요${n===4?' · 사계 완성!':''}`:''}
+function grSay(t){const b=$('grBubble');if(b.textContent===t)return;b.textContent=t;const w=b.closest('.gr-bubble');w.classList.remove('say');void w.offsetWidth;w.classList.add('say')}
+const GR_PICK_SAY=()=>'마우스를 아래로 내리면 화장대 위 악보가 보여요. 눌러서 손에 들어요. 연습은 맨 왼쪽 「반짝반짝 작은 별」!';
+function grIdleSay(){const hn=grHeld&&(grHeld==='reh'?'리허설':'「'+SEASONS[grHeld].name+'」');grSay(grHeld&&grStage==='desk'?`${hn} 악보를 들고 있어요. 빛나는 빈자리를 누르면 내려놓고, 다른 악보를 누르면 바꿔 들어요.`:grHeld?GR_HELD_SAY():grStage==='desk'?GR_PICK_SAY():camOn||grNoCam?'편하게 둘러보세요. 화장대 위 악보를 고르면 공연 준비가 끝나요.':'지휘자님, 오셨어요? 공연 전에 거울 앞 의자에 앉아 어깨선부터 맞춰 볼까요?')}
+function grMirror(){$('grBar').hidden=camOn||grNoCam;$('grReady').hidden=!camOn;$('grViewBtn').textContent=grStage==='desk'?'일어나기':'의자에 앉기'}
+function showGreenRoom(){fillProgram();state='idle';grStage='room';grHeld=null;grDoorOpen=false;/* back in the green room = standing in the room, free to look around */curtain=0;grWalk=false;grPoseCur=null;$('result').hidden=true;$('intro').hidden=false;$('intro').classList.remove('dim');$('calib').classList.remove('room');$('seasonInfo').hidden=true;$('rehInfo').hidden=true;grMirror();grIdleSay()}
+function showSeasonPick(){showGreenRoom()}
+/* walk to the red curtain, then black, then the stage */
+function goStage(fn){$('seasonInfo').hidden=true;$('rehInfo').hidden=true;grWalk=true;const f=$('grFade');setTimeout(()=>f.classList.add('on'),1100);setTimeout(()=>{fn();grWalk=false;setTimeout(()=>f.classList.remove('on'),350)},1900)}
+async function grMirrorAct(){$('camErr0').hidden=true;if(!ac)initAudio();ac.resume();$('seasonInfo').hidden=true;$('rehInfo').hidden=true;if(camOn){openCalib();return}await startCam();if(!camOn){$('camErr0').hidden=false;$('camErr0').textContent='카메라를 켤 수 없어요. 크롬 주소창 옆에서 카메라를 허용해 주세요.';$('noCamBtn').hidden=false;grSay('카메라를 켤 수 없어요. 크롬에서 카메라를 허용하거나, 키보드로 해요.')}}
+/* sitting down on the make-up chair = the set-up in front of the mirror */
+function grSit(){if(camOn||grNoCam){grStage='desk';grMirror();grIdleSay();return}grSay('앉으셨어요? 거울을 보면서 어깨선을 맞춰 볼게요.');grMirrorAct()}
+function openReh(){if(!ac)initAudio();ac.resume();grStage='desk';grMirror();$('seasonInfo').hidden=true;$('rehInfo').hidden=false;grSay('리허설은 커튼 뒤 무대에서 해요. 편하게 연습하세요!')}
+function grDoorAct(){if(!grHeld){grSay('먼저 화장대 위 악보를 챙겨 주세요! 의자에 앉아 고개를 숙이면 보여요.');return}
+  if(!camOn&&!grNoCam){$(grHeld==='reh'?'rehGo':'introCam').click();return}/* no camera yet: the old path (camera on, set-up, then the stage) */
+  grDoorOpen=true;ding(true);grSay('문이 열려요. 무대로 갑니다!');const k=grHeld;setTimeout(()=>goStage(k==='reh'?startRehearsal:()=>start()),900)}
+$('sitBtn').addEventListener('click',grSit);$('grViewBtn').addEventListener('click',()=>{if(grStage==='desk'){grStage='room';grMirror();grIdleSay()}else grSit()});
+$('recalBtn').addEventListener('click',grMirrorAct);
+$('noCamBtn').addEventListener('click',()=>{grNoCam=true;grStage='desk';if(!ac)initAudio();ac.resume();grMirror();grSay('키보드로 지휘해요 · Enter 박자, F 강세, C 끊기, B 양손 번쩍. 이제 화장대 위 악보를 눌러 골라 주세요.')});
+$('rehBack').addEventListener('click',()=>{$('rehInfo').hidden=true;grIdleSay()});
+$('rehGo').addEventListener('click',async()=>{if(camOn||grNoCam){goStage(startRehearsal);return}alignOnly=true;await startCam();if(!camOn){alignOnly=false;grSay('웹캠을 켤 수 없어요. ‘카메라 없이’를 눌러 키보드로 해 보세요.')}});
 /* ---- calibration: face + both hands into dashed outlines ---- */
 const HAND_PATH='M-5.5 8C-6.5 4-7 0-7.5-3L-11-10Q-11.8-12-10-12.3L-6.2-5.5L-5.2-14Q-4.8-16-3.2-15.6L-2.4-6L-1.3-16.5Q-.8-18.2.9-17.6L1.2-6L3.2-15Q3.9-16.6 5.3-15.6L4.6-4L9.5-6.5Q11.5-7 11-5L6 2C6 5 5 7 4.5 8Z';
 document.querySelectorAll('.t-hand').forEach((g,i)=>{g.innerHTML=`<path class="t" d="${HAND_PATH}" transform="${i?'':'scale(-1 1)'}"/>`});
 const TGT={face:{x:80,y:30,rx:11,ry:15},left:{x:32,y:58},right:{x:128,y:58}};
 const SH_LINE={y:56,tol:7,tilt:6};/* calibration step 1: shoulder guide line in the 160x90 calib box, allowed offset and tilt */
-function boxPt(lmx,lmy,box){const bw=box.clientWidth,bh=box.clientHeight,vw=video.videoWidth||16,vh=video.videoHeight||9,s=Math.max(bw/vw,bh/vh),W=vw*s,H=vh*s;return{x:((bw-W)/2+lmx*W)/bw*160,y:((bh-H)/2+lmy*H)/bh*90}}
+function boxPt(lmx,lmy,box){const bw=box.clientWidth||160,bh=box.clientHeight||90,vw=video.videoWidth||16,vh=video.videoHeight||9,s=Math.max(bw/vw,bh/vh),W=vw*s,H=vh*s;return{x:((bw-W)/2+lmx*W)/bw*160,y:((bh-H)/2+lmy*H)/bh*90}}
 let calibStep=1,pr={beats:0,amps:[]},lcStage='hi',lcBuf=[];
 function ding(hi){if(!ac)return;osc('sine',hi?1320:990,ac.currentTime,.12,.12,master,{attack:.005,release:.15})}
-function openCalib(){if(!camOn)return;if(!ac)initAudio();ac.resume();calibOn=true;const v=$('calibVideo');v.srcObject=stream;v.play().catch(()=>{});$('intro').hidden=true;$('calib').hidden=false;setStep(1)}
+function openCalib(){if(!camOn)return;if(!ac)initAudio();ac.resume();calibOn=true;const v=$('calibVideo');v.srcObject=stream;v.play().catch(()=>{});$('intro').classList.add('dim');$('calib').classList.toggle('room',!$('intro').hidden);$('calib').hidden=false;setStep(1)}
 function setStep(n){
   if(n!==3)lpToneOn(false);if(n!==4)stopMetro();
   calibStep=n;calibHold=0;const c=$('calib');c.classList.toggle('mini',n>1);c.classList.toggle('step3',n>=3);$('calibBar').style.width='0%';
   /* the rehearsal path only does step 1 (in the picture) and step 4 (timing); it teaches the left hand itself */
-  $('calibStepNo').textContent=alignOnly?`${n===1?1:2} / 2`:`${n} / 4`;
-  if(n===1){$('calibTitle').textContent='어깨를 점선에 맞추고 두 손을 보여주세요';$('calibMsg').textContent='어깨선이 점선에 오도록 앉고, 두 손을 어깨 높이쯤 들어 1초만 있으면 넘어가요.'}
+  $('calibStepNo').textContent=$('calib').classList.contains('room')?'거울 앞 · 어깨선 맞추기':alignOnly?`${n===1?1:2} / 2`:`${n} / 4`;
+  if(n===1){const rm=c.classList.contains('room');$('calibTitle').textContent=rm?'거울 속 점선에 어깨선을 맞춰 주세요':'어깨를 점선에 맞추고 두 손을 보여주세요';$('calibMsg').textContent=rm?'거울 속 내 어깨가 점선에 오도록 바르게 앉아 1초만 있으면 돼요.':'어깨선이 점선에 오도록 앉고, 두 손을 어깨 높이쯤 들어 1초만 있으면 넘어가요.'}
   if(n===2){lcStage='hi';lcBuf=[];$('calibTitle').textContent='왼손을 머리 위로 쭉 올려주세요';$('calibMsg').textContent='제일 크게 연주할 때의 높이예요. 1초만 멈춰 있으면 기억해요.'}
   if(n===3){lpStage='hold';lpCuts=0;$('calibTitle').textContent='왼손 늘이기: 화면 가운데까지 올리고 멈춰요';$('calibMsg').textContent='보면대에 보라색 ◠가 오면 이렇게 해요. 왼손을 들고 1초 동안 가만히 있어 보세요.';$('calibDots').textContent='◠'}
   if(n===4){pr={beats:0,amps:[],offs:[],need:8};$('calibTitle').textContent='"딱" 소리에 맞춰 오른손을 8번 저어보세요';$('calibMsg').textContent='위에서 아래로 "툭" 내리는 순간을 소리에 맞춰요. 카메라가 늦게 알아채는 시간을 재서 판정에 맞춰 줘요.';showDots();startMetro()}
@@ -1057,12 +1375,12 @@ function practiceGesture(g,amp){
     if(lm!=null)TUNE.lag=Math.max(0,Math.min(.45,lm/1000));
     saveTune();
     $('calibMsg').textContent=lm==null?'좋아요!':`좋아요! 저은 동작이 평균 ${(Math.max(0,lm)/1000).toFixed(2)}초 늦게 잡혀요. 판정에 그만큼 맞춰 둘게요.`;
-    setTimeout(()=>closeCalib(true),1600)}
+    setTimeout(()=>{if(calibOn&&calibStep===4)closeCalib(true)},1600)}
 }
-function closeCalib(ok){stopMetro();if(alignOnly){alignOnly=false;calibOn=false;lpToneOn(false);$('calib').hidden=true;$('calib').classList.remove('mini','step3');startRehearsal();return}calibOn=false;lpToneOn(false);$('calib').hidden=true;$('calib').classList.remove('mini','step3');
+function closeCalib(ok){stopMetro();if(alignOnly){alignOnly=false;calibOn=false;lpToneOn(false);$('calib').hidden=true;$('calib').classList.remove('mini','step3');$('intro').classList.remove('dim');$('calib').classList.remove('room');startRehearsal();return}calibOn=false;lpToneOn(false);$('calib').hidden=true;$('calib').classList.remove('mini','step3');
   try{localStorage.setItem('leftCal',JSON.stringify(LC))}catch(e){}
-  if(startAfterCalib){startAfterCalib=false;start()}else if(state==='idle')$('intro').hidden=false}
-$('calibSkip').addEventListener('click',()=>{if(alignOnly){closeCalib(false);return}if(calibStep<4)setStep(calibStep+1);else closeCalib(false)});
+  $('intro').classList.remove('dim');$('calib').classList.remove('room');if(startAfterCalib){startAfterCalib=false;$('intro').hidden=true;start()}else if(state==='idle'){showGreenRoom();grStage='desk';grMirror();grSay('준비 완료! '+GR_PICK_SAY())}}
+$('calibSkip').addEventListener('click',()=>{if(alignOnly||$('calib').classList.contains('room')){closeCalib(false);return}if(calibStep<4)setStep(calibStep+1);else closeCalib(false)});
 function updateCalib(dt){
   if(!calibOn)return;const now=performance.now(),poseOk=now-poseSeen<500;
   if(calibStep===1){
@@ -1073,11 +1391,11 @@ function updateCalib(dt){
       if(vis(L[11])&&vis(L[12])){const box=document.querySelector('#calib .calib-box'),a=boxPt(L[11].x,L[11].y,box),b=boxPt(L[12].x,L[12].y,box);sy=(a.y+b.y)/2;tilt=Math.abs(a.y-b.y);sOk=Math.abs(sy-SH_LINE.y)<SH_LINE.tol&&tilt<SH_LINE.tilt}}
     const sn=$('tShNow');sn.setAttribute('opacity',sy==null?0:.9);if(sy!=null){const y=Math.max(1,Math.min(89,sy));sn.setAttribute('y1',y);sn.setAttribute('y2',y);sn.setAttribute('stroke',sOk?'#c5eb45':'#ffb347')}
     $('tFace').classList.toggle('ok',fOk);$('tShoulder').classList.toggle('ok',sOk);$('tLeft').classList.toggle('ok',lOk);$('tRight').classList.toggle('ok',rOk);
-    const allOk=sOk&&fOk&&lOk&&rOk;
+    const room=$('calib').classList.contains('room'),allOk=sOk&&(room||fOk&&lOk&&rOk);/* facing the mirror: the level for the head bow */
     if(allOk)calibHold+=dt;else calibHold=Math.max(0,calibHold-dt*2);
     $('calibBar').style.width=Math.min(100,calibHold*100)+'%';
-    $('calibMsg').textContent=!poseOk?'몸이 안 보여요. 카메라에서 조금 떨어져 상체가 다 나오게 앉아주세요.':allOk?'좋아요! 그대로 잠깐만…':sy==null?'두 어깨가 화면에 보이게 앉아주세요.':sy<SH_LINE.y-SH_LINE.tol?'어깨가 너무 위에 있어요. 카메라를 조금 위로 올리거나 의자를 낮춰주세요.':sy>SH_LINE.y+SH_LINE.tol?'어깨가 너무 아래예요. 카메라를 조금 낮추거나 뒤로 물러나 주세요.':tilt>=SH_LINE.tilt?'어깨를 수평으로 펴주세요.':!fOk?'얼굴이 화면에 보이게 해주세요.':!lOk&&!rOk?'두 손을 어깨 높이쯤 들어서 화면에 보이게 해주세요.':!lOk?'왼손(화면 왼쪽)이 안 보여요. 조금 더 들어주세요.':'오른손(화면 오른쪽)이 안 보여요. 조금 더 들어주세요.';
-    if(calibHold>=1){ding();setStep(alignOnly?4:2)}
+    $('calibMsg').textContent=!poseOk?'몸이 안 보여요. 카메라에서 조금 떨어져 상체가 다 나오게 앉아주세요.':allOk?'좋아요! 그대로 잠깐만…':sy==null?'두 어깨가 화면에 보이게 앉아주세요.':sy<SH_LINE.y-SH_LINE.tol?'어깨가 너무 위에 있어요. 카메라를 조금 위로 올리거나 의자를 낮춰주세요.':sy>SH_LINE.y+SH_LINE.tol?'어깨가 너무 아래예요. 카메라를 조금 낮추거나 뒤로 물러나 주세요.':tilt>=SH_LINE.tilt?'어깨를 수평으로 펴주세요.':room?'좋아요!':!fOk?'얼굴이 화면에 보이게 해주세요.':!lOk&&!rOk?'두 손을 어깨 높이쯤 들어서 화면에 보이게 해주세요.':!lOk?'왼손(화면 왼쪽)이 안 보여요. 조금 더 들어주세요.':'오른손(화면 오른쪽)이 안 보여요. 조금 더 들어주세요.';
+    if(calibHold>=1){ding();if($('calib').classList.contains('room'))closeCalib(true);else setStep(alignOnly?4:2)}/* in the green room the mirror only checks the shoulder line; the rest is learned in the rehearsal */
   }else if(calibStep===2){
     if(leftH!=null&&now-leftSeen<400){lcBuf.push({t:now,h:leftH});lcBuf=lcBuf.filter(q=>now-q.t<700);
       const hs=lcBuf.map(q=>q.h),mean=hs.reduce((a,b)=>a+b,0)/hs.length,still=hs.length>=4&&Math.max(...hs)-Math.min(...hs)<.15;
@@ -1105,28 +1423,38 @@ function schedule(){
   while(nextClick<0&&audioTime+(nextClick-audioPos)*spb<ac.currentTime+ahead){click(Math.max(ac.currentTime,audioTime+(nextClick-audioPos)*spb),((nextClick%4)+4)%4===0);nextClick++}
   while(evIdx<events.length&&audioTime+(events[evIdx].beat-audioPos)*spb<ac.currentTime+ahead){const e=events[evIdx];play(e,Math.max(ac.currentTime,audioTime+(e.beat-audioPos)*spb),spb);evIdx++}
 }
+const FACT={spring:'지난 100년 사이 봄은 17일이나 일찍 찾아오게 됐다.',summer:'지난 100년 사이 여름은 98일에서 118일로 길어졌다.',autumn:'지난 100년 사이 가을은 73일에서 69일로 짧아졌다.',winter:'지난 100년 사이 겨울은 109일에서 87일로 짧아졌다.'};
+function loadStamps(){try{return JSON.parse(localStorage.getItem('seasonStamps')||'{}')||{}}catch(e){return{}}}
+/* the result is the next morning's review: headline from the tier, body from the stats, a kept/lost stamp and the four-season stamp row */
 function finish(){
-  state='done';master.gain.setTargetAtTime(0,ac.currentTime+.8,.5);ambGain.gain.setTargetAtTime(0,ac.currentTime,.2);
-  const acc=accuracy()||0;
-  /* summer: missing the last ✕ means summer didn't end on time, so the result drops at least one step */
-  const tier=Math.max(health>=.6?0:health>=.35?1:2,SEASON.key==='summer'&&!gStats.cutoff?1:0);
-  $('resTitle').textContent=SEASON.result[tier];
-  $('resMsg').textContent=`오케스트라가 끝까지 당신의 지휘봉을 따라왔어요.${stops?` 중간에 ${stops}번 멈췄다가 다시 이어갔어요.`:''}`;
-  $('resRows').innerHTML=[[SEASON.meter?SEASON.meter+' ('+SEASON.name+')':SEASON.name+' 생명력',Math.round(health*100)+'%',1],['최대 콤보',maxCombo+'',1],['지휘한 시간',Math.round(conductTime)+'초'],['박자 고르기',Math.round(acc*100)+'%'],['멈춘 횟수',stops+'번']]
+  state='done';cue('');master.gain.setTargetAtTime(0,ac.currentTime+.8,.5);ambGain.gain.setTargetAtTime(0,ac.currentTime,.2);
+  const acc=Math.round((accuracy()||0)*100),tier=calcTier(),S=SEASON,st=loadStamps(),d=new Date();
+  if(st[S.key]==null||tier<st[S.key])st[S.key]=tier;try{localStorage.setItem('seasonStamps',JSON.stringify(st))}catch(e){}
+  $('resDate').textContent=`${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`;
+  $('resKick').textContent=`공연 리뷰 · 비발디 「사계」 ${S.name}`;
+  $('resTitle').textContent=`“${S.result[tier]}”`;
+  $('resMsg').textContent=[`신예 지휘자, 자연의 소리로 ${S.name}을 지켜내다 · ★★★`,`신예 지휘자의 ${S.name}, 절반의 성공 · ★★☆`,`위기의 ${S.name}, 지휘봉만으로는 부족했다 · ★☆☆`][tier];
+  $('resBody').innerHTML=[['객석은 기립박수와 "브라보!"로 답했다.','객석에서는 따뜻한 박수가 이어졌다.','박수는 드문드문했다. 그래도 지휘봉은 끝까지 내려놓지 않았다.'][tier]+` 이날 오케스트라는 ${Object.values(S.names).join(', ')}의 소리로 ${S.name}을 지키려 했다.`+(THREAT[S.key]&&FOCUS.length?` 자연의 소리는 ${FOCUS.length}번의 차례 중 ${saves}번 ${THREAT[S.key].obj} 밀어냈다.`:''),
+    `지휘자의 박자는 ${acc}%가 고르게 맞았고, 최대 ${maxCombo} 콤보를 이어 갔다.`+(stops?` 중간에 ${stops}번 멈췄다가 다시 이어 갔다.`:' 한 번도 멈추지 않았다.'),
+    FACT[S.key]+(tier<2?` 무대 위의 ${S.name}은 지켜냈지만, 무대 밖의 ${S.name}은 여전히 바뀌고 있다.`:` 무대 위에서도, 무대 밖에서도 ${S.name}은 위기에 놓여 있다.`)].map(t=>`<p>${t}</p>`).join('')+'<p class="byline">글 · 사계일보 문화부</p>';
+  $('resRows').innerHTML=[[S.meter&&S.meter!==S.name?S.meter+' ('+S.name+')':S.name+' 생명력',Math.round(health*100)+'%',1],['최대 콤보',maxCombo+'',1],['지휘한 시간',Math.round(conductTime)+'초'],['박자 고르기',acc+'%'],['멈춘 횟수',stops+'번']]
     .map(([a,b,big])=>`<div class="${big?'big':''}"><span>${a}</span><span>${b}</span></div>`).join('');
-  $('result').hidden=false;yawLocked=false;
+  const rs=$('resStamp');rs.textContent=['지켜냄','절반','놓침'][tier];rs.className='pstamp t'+tier;
+  const ks=['spring','summer','autumn','winter'],kept=ks.filter(k=>st[k]!=null&&st[k]<=1).length;
+  $('resStamps').innerHTML=ks.map(k=>`<span class="${st[k]==null?'':st[k]<=1?'ok':'no'}${k===S.key?' now':''}">${SEASONS[k].name}</span>`).join('')+`<em>${kept} / 4 계절을 지켰어요${kept===4?' · 사계 완성!':''}</em>`;
+  $('finaleBtn').hidden=kept<4;$('result').hidden=false;yawLocked=false;
 }
-
 /* =========================================================
    6. labels, stand display, baton
    ========================================================= */
 const labelsEl=$('labels');
 PARTS.forEach(p=>{const d=document.createElement('div');d.className='lab';d.innerHTML=`<b>${p.name}</b><small>${p.inst}</small>`;labelsEl.appendChild(d);p.lab=d});
-let PV=null;
+let PV=null,qT0=0,qN=0;
 function project(p){const c=M4.ap(PV,p),w=PV[3]*p[0]+PV[7]*p[1]+PV[11]*p[2]+PV[15];if(w<=.1)return null;return{x:(c[0]/w*.5+.5)*innerWidth,y:(1-(c[1]/w*.5+.5))*innerHeight}}
 const stand=$('stand'),sctx=stand.getContext('2d'),fx=$('fx'),fctx=fx.getContext('2d');
 /* Maestro-style stand: left half = left hand (loudness), right half = right hand (beats) */
 function drawStand(){
+  const pos=hearPos();
   {const hide=preShow&&!REH.on;$('stand').style.visibility=hide?'hidden':'visible';if(hide)return}
   const dpr=devicePixelRatio||1,W=stand.clientWidth,H=stand.clientHeight;if(stand.width!==W*dpr){stand.width=W*dpr;stand.height=H*dpr}
   const c=sctx,now=performance.now();c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);c.textBaseline='middle';
@@ -1186,13 +1514,15 @@ function drawStand(){
       c.fillStyle='#fff';c.font=`bold ${Math.round(r*1.1)}px sans-serif`;c.textAlign='center';c.fillText('✋',colC,y+1);
       if(!ok){c.fillStyle='#ff6b5a';c.font="bold 16px sans-serif";c.fillText(vol<tv?'⬆':'⬇',colC,y+(vol<tv?-r-10:r+10))}}}
   /* right half: one arrow per beat, big red box on the first beat of each bar */
-  for(let b=Math.ceil(pos-.3);b<pos+AH;b++){if(b<0||b>=total||judgedBeats.has(b))continue;const a=b-pos,bar=b%4===0,w=wAt(a),x=cx+w/4,y=yAt(a),s=Math.max(10,(bar?42:26)*(1-f(Math.max(0,a))*.72));
+  for(let b=Math.ceil(pos-.3);b<pos+AH;b++){if(b<0||b>=total||judgedBeats.has(b)||!needBeat(b))continue;const a=b-pos,bar=b%4===0,w=wAt(a),x=cx+w/4,y=yAt(a),s=Math.max(10,(bar?42:26)*(1-f(Math.max(0,a))*.72));
     if(accState.some(q=>q.b===b&&!q.done))continue;box(x,y,s,bar?'#e0453a':'#ff8f86',bar?'⬇':'↓',bar)}
   accState.forEach(q=>{const a=q.b-pos;if(q.done||a<-.3||a>AH)return;const w=wAt(a),x=cx+w/4,y=yAt(a),s=Math.max(14,52*(1-f(Math.max(0,a))*.7));
     box(x,y,s,'#ff9d1a','💥',true);c.fillStyle='#ffd9a0';c.font=`bold ${Math.max(9,Math.round(s*.3))}px 'Gowun Dodum'`;c.fillText('세게!',x,y+s*.72)});
   if(bothEv&&!bothEv.done){const a=bothEv.b-pos;if(a>-.5&&a<AH){const w=wAt(a),y=yAt(a),s=Math.max(16,56*(1-f(Math.max(0,a))*.7));
     c.fillStyle='#8a5cf6cc';c.beginPath();c.roundRect?c.roundRect(cx-w*.42,y-s/2,w*.84,s,s*.25):c.rect(cx-w*.42,y-s/2,w*.84,s);c.fill();
     c.fillStyle='#fff';c.textAlign='center';c.font=`bold ${Math.round(s*.6)}px sans-serif`;c.fillText('🙌',cx-s*.9,y+1);c.font=`bold ${Math.round(s*.36)}px 'Gowun Dodum'`;c.fillText('양손 번쩍!',cx+s*.5,y+1)}}
+  /* where your last strokes landed: above the line = early, below = late (heard beat, camera lag removed) */
+  offHist.forEach(o=>{const k=(now-o.t)/800;if(k>=1||state!=='play')return;const d=Math.min(30,hit-yAt(Math.min(.5,Math.abs(o.fr))));c.fillStyle=`rgba(255,255,255,${(1-k)*.9})`;c.fillRect(cx+wB/4-22,hit+(o.fr<0?-d:d)-1.5,44,3)});
   /* hit line */
   c.strokeStyle='#f2d22e';c.lineWidth=4;c.beginPath();c.moveTo(cx-wB/2-4,hit);c.lineTo(cx+wB/2+4,hit);c.stroke();
   if(state==='play'&&batonDip>.5){c.strokeStyle=`rgba(242,210,46,${batonDip*.6})`;c.lineWidth=9;c.beginPath();c.moveTo(cx,hit);c.lineTo(cx+wB/2,hit);c.stroke()}
@@ -1220,7 +1550,7 @@ function drawFx(dt){
 }
 
 /* ---- 3D mittens drawn from the pose landmarks ---- */
-const handBufs={true:{p:gl.createBuffer(),n:gl.createBuffer(),c:gl.createBuffer(),count:0},false:{p:gl.createBuffer(),n:gl.createBuffer(),c:gl.createBuffer(),count:0}};
+const handBufs={true:dyn('mesh',ovScene),false:dyn('mesh',ovScene)};
 
 /* left hand comes from the body model only (no fingers): a round mitten */
 function drawMitten(fy,asp,pts,right){
@@ -1229,12 +1559,16 @@ function drawMitten(fy,asp,pts,right){
   const P=q=>{const sx=((W-VW)/2+(1-q.x)*VW)/W,sy=((H-VH)/2+q.y*VH)/H-.04;return[(sx-.5)*visW,(.5-sy)*visH,-d]};
   const[w,pk,ix,th]=pts.map(P),nrm=v=>{const l=Math.hypot(...v)||1;return v.map(x=>x/l)};
   const c=[0,1,2].map(i=>(pk[i]+ix[i])/2*.65+w[i]*.35),dir=nrm(c.map((v,i)=>v-w[i])),r=.026,g=new Geo();
-  const glove=right?'#fffaf0':vol!=null&&vol>.7?'#fff7d6':vol!=null&&vol<.3?'#e4f1ff':'#fffaf0';
-  g.sphere(M4.chain(M4.T(...c),M4.S(1,1,.75)),r*1.25,12,9,glove);g.sphere(M4.T(...c.map((v,i)=>v+dir[i]*r*1.2)),r*1.05,12,9,glove);
-  const td=nrm(th.map((v,i)=>v-c[i]));g.sphere(M4.T(...c.map((v,i)=>v+td[i]*r*1.2)),r*.55,10,7,glove);
-  g.sphere(M4.T(...w),r*.95,10,7,'#c9a8f0');const el=[w[0]-dir[0]*.18,w[1]-dir[1]*.18-.1,w[2]-dir[2]*.18+.05];g.seg(w,el,r*.8,'#2a2238',10);
-  if(right){const a=c.map((v,i)=>v+td[i]*r*.6),tip=a.map((v,i)=>v+dir[i]*.17-(i===2?.04:0));g.seg(a,tip,r*.08,'#fbfaf5',6);g.sphere(M4.T(...tip),r*.22,8,6,'#f7ff8a');g.sphere(M4.T(...a),r*.32,8,6,'#c9a46a')}
-  const B=handBufs[right];fillDyn(B,g.p,g.c);gl.bindBuffer(gl.ARRAY_BUFFER,B.n);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(g.n),gl.DYNAMIC_DRAW);
+  /* the conductor's own arm: tailcoat sleeve, white shirt cuff, a round hand like the players'; the left cuff glows warm/cool with the volume */
+  const skin='#f0c8a0',cuff=right?'#f7f5ef':vol!=null&&vol>.7?'#ffd75a':vol!=null&&vol<.3?'#8fc4ff':'#f7f5ef';
+  g.sphere(M4.chain(M4.T(...c),M4.S(1,1,.72)),r*1.2,14,10,skin);g.sphere(M4.chain(M4.T(...c.map((v,i)=>v+dir[i]*r*1.15)),M4.S(1,1,.7)),r*1.0,14,10,skin);
+  const td=nrm(th.map((v,i)=>v-c[i]));g.sphere(M4.T(...c.map((v,i)=>v+td[i]*r*1.25)),r*.5,10,7,skin);
+  const cb=w.map((v,i)=>v-dir[i]*r*1.3),el=[w[0]-dir[0]*.3,w[1]-dir[1]*.3-.16,w[2]-dir[2]*.3+.08];
+  g.seg(w.map((v,i)=>v+dir[i]*r*.3),cb,r*.95,cuff,12);g.seg(cb,el,r*1.15,'#141418',12);g.sphere(M4.T(...cb),r*1.15,10,7,'#141418');
+  if(right){const a=c.map((v,i)=>v+td[i]*r*.6),tip=a.map((v,i)=>v+dir[i]*.17-(i===2?.04:0));if(BATON){/* Blender baton: 1 unit long along +Y, stretched from the grip a to the tip */
+      const d=new THREE.Vector3(tip[0]-a[0],tip[1]-a[1],tip[2]-a[2]),L=d.length();BATON_M.compose(new THREE.Vector3(...a),new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize()),new THREE.Vector3(L,L,L));drawMesh(BATON,BATON_M.elements)}
+    else{g.seg(a,tip,r*.08,'#fbfaf5',6);g.sphere(M4.T(...tip),r*.22,8,6,'#f7ff8a');g.sphere(M4.T(...a),r*.32,8,6,'#c9a46a')}}
+  const B=handBufs[right];fillDyn(B,g.p,g.c,g.smooth());
   drawMesh(B,M4.id());
 }
 
@@ -1288,54 +1622,154 @@ function applySeason(k){SEASON=SEASONS[k];TARGET=SEASON.bpm;TOTAL_BARS=SEASON.to
   FOCUS=SEASON.focus.map(f=>({bar:f.beat!=null?f.beat/BPB:f.bar,len:f.len,key:f.key,...FP[f.key]}));backdrop=BACKDROPS[k];sunMesh=SUNS[k];
   PARTS.forEach(p=>{p.name=SEASON.names[p.key];if(p.lab)p.lab.querySelector('b').textContent=p.name});
   document.querySelector('#stageSign b').textContent=SEASON.name;document.querySelector('#stageSign small').textContent=SEASON.key==='rehearsal'?'커튼 뒤에서 단원들과 호흡 맞추기 · 반짝반짝 작은 별':SEASON.en+' · 비발디 「사계」 '+SEASON.mv;$('valance').textContent=SEASON.name;
-  $('seasonTitle').textContent='오늘의 공연: '+SEASON.name;$('seasonStory').textContent=SEASON.story;
+  $('seasonTitle').textContent='오늘의 공연: '+SEASON.name;$('seasonStory').textContent=SEASON.story+(THREAT[SEASON.key]?` 오늘의 위협은 ‘${THREAT[SEASON.key].name}’. 자연의 소리가 연주할 차례에 박자를 맞추면 위협을 밀어내요.`:'');
   document.querySelector('.hud h1 span').textContent=preShow?'':'· '+SEASON.name;document.querySelector('.hud p').textContent=preShow?'':SEASON.key==='rehearsal'?'본공연 전 리허설 · 반짝반짝 작은 별':'비발디 「사계」 '+SEASON.name+' '+SEASON.mv;document.title='사계 지휘자 · '+SEASON.name}
 function directorFocus(){if(state!=='play')return null;const bar=pos/4;return FOCUS.find(f=>bar>=f.bar-.25&&bar<f.bar+f.len)||null}
-let yawLocked=false,bowStep=null,bowAmt=0,bowT=0,clap=0;
-function beginBow(){state='bow';bowStep='turn';bowT=0;ambGain.gain.setTargetAtTime(0,ac.currentTime,.2);
-  toast('연주 끝! 관객 쪽으로 돌아서요 · 고개를 크게 돌리거나 오른손을 내리세요')}
+let yawLocked=false,bowStep=null,bowAmt=0,bowT=0,clap=0,ccTier=1,bowN=0,ovation=0;
+/* curtain call scaled by how well the season was kept: 0 = standing ovation with bravos and an encore bow, 2 = scattered claps */
+const CC=[{dur:6,dens:1.3,clap:1,sub:'기립박수가 쏟아져요! 브라보!'},{dur:4.2,dens:1,clap:.8,sub:'따뜻한 박수가 나와요'},{dur:2.8,dens:.3,clap:.3,sub:'박수가 드문드문 나와요…'}];
+function calcTier(){return Math.max(health>=.6?0:health>=.35?1:2,SEASON.key==='summer'&&!gStats.cutoff?1:0)}/* summer: missing the last ✕ means summer didn't end on time */
+function beginBow(){state='bow';bowStep='turn';bowT=0;bowN=0;ovation=0;ccTier=calcTier();ambGain.gain.setTargetAtTime(0,ac.currentTime,.2);showChapter('CURTAIN CALL',['오늘 밤 최고의 무대','관객에게 인사해요','그래도 끝까지 지휘했어요'][ccTier]);
+  cue(camOn?'연주 끝! 관객 쪽으로 돌아서요 · 고개를 크게 돌리거나 오른손을 내리세요':'연주 끝! 관객 쪽으로 돌아서요 · ← → 또는 Enter','CURTAIN CALL')}
 function bowAction(){if(bowStep==='turn')turnToAudience(yawTarget<0?-1:1);else if(bowStep==='bow')doBow()}
-function turnToAudience(dir){bowStep='turning';yawLocked=true;yawTarget=dir*Math.PI;bowT=0;toast('관객들이 기다리고 있어요')}
-function doBow(){bowStep='bowing';bowT=0;applause(4.2);toast('박수갈채가 쏟아져요!')}
-function applause(dur){const t0=ac.currentTime;for(let i=0;i<dur*70;i++){const u=Math.random(),t=t0+u*dur,v=(.05+Math.random()*.07)*(1-u*.7);
+function turnToAudience(dir){bowStep='turning';yawLocked=true;yawTarget=dir*Math.PI;bowT=0;cue('관객들이 기다리고 있어요','CURTAIN CALL')}
+function doBow(){bowStep='bowing';bowT=0;bowN++;const c=CC[ccTier];applause(c.dur*(bowN>1?.8:1),c.dens);if(ccTier===0){bravos(bowN>1?5:8);flash=.3}
+  cue(bowN>1?'앙코르 인사에 객석이 다시 들썩여요!':c.sub,'CURTAIN CALL')}
+function applause(dur,dens=1){const t0=ac.currentTime;for(let i=0;i<dur*70*dens;i++){const u=Math.random(),t=t0+u*dur,v=(.05+Math.random()*.07)*(1-u*.7);
   const sN=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();sN.buffer=noiseBuf;f.type='bandpass';f.frequency.value=900+Math.random()*1800;f.Q.value=1.4;
   g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.003);g.gain.exponentialRampToValueAtTime(.001,t+.06);sN.connect(f);f.connect(g);g.connect(master);sN.start(t,Math.random()*1.5);sN.stop(t+.08)}}
+/* "bra-vo!": a gliding sawtooth through an 'a' then an 'o' formant, a few voices scattered over the house */
+function bravos(n){const t0=ac.currentTime+.4;for(let i=0;i<n;i++){const t=t0+Math.random()*2.6,f=140+Math.random()*130,v=.018+Math.random()*.014;
+  [[0,.2,f,f*1.3,850],[.22,.5,f*1.25,f*.8,520]].forEach(([d,l,a,b,fm])=>{const o=ac.createOscillator(),bp=ac.createBiquadFilter(),g=ac.createGain();o.type='sawtooth';o.frequency.setValueAtTime(a,t+d);o.frequency.linearRampToValueAtTime(b,t+d+l);
+    bp.type='bandpass';bp.frequency.value=fm;bp.Q.value=2.5;g.gain.setValueAtTime(0,t+d);g.gain.linearRampToValueAtTime(v,t+d+.04);g.gain.setValueAtTime(v,t+d+l*.7);g.gain.linearRampToValueAtTime(0,t+d+l);o.connect(bp);bp.connect(g);g.connect(master);o.start(t+d);o.stop(t+d+l+.05)})}}
 function updateBow(dt){
   if(state!=='bow')return;bowT+=dt;
   /* turn: a big head turn (raw head angle, not the snapped zone), any gesture, or automatically after 2 s */
   if(bowStep==='turn'){const hy=camOn&&performance.now()-headSeen<500?headYawRaw:0;if(Math.abs(hy)>40*D2R)turnToAudience(hy<0?-1:1);else if(!camOn&&Math.abs(yawTarget)>62*D2R)turnToAudience(yawTarget<0?-1:1);else if(bowT>2)turnToAudience(yaw<0?-1:1)}
-  if(bowStep==='turning'&&bowT>1.1){bowStep='bow';bowT=0;noseLift0=noseLift;toast('관객에게 인사하세요 · 고개를 숙이거나 오른손을 내리세요')}
-  if(bowStep==='bow'){if(camOn&&noseLift0!=null&&noseLift!=null&&performance.now()-poseSeen<400&&noseLift<noseLift0-.15)doBow();else if(bowT>6)doBow()}
-  if(bowStep==='bowing'){bowAmt=bowT<.7?bowT/.7:bowT<1.4?1:Math.max(0,1-(bowT-1.4)/.7);clap=Math.min(1,bowT*2)*Math.max(0,1-(bowT-3.4)/1);if(bowT>4.4){bowStep=null;clap=0;finish()}}
+  if(bowStep==='turning'&&bowT>1.1){bowStep='bow';bowT=0;noseLift0=noseLift;cue(camOn?'관객에게 인사하세요 · 고개를 숙이거나 오른손을 내리세요':'관객에게 인사하세요 · Enter','CURTAIN CALL')}
+  if(bowStep==='bow'){if(bowN)clap+=(.7-clap)*Math.min(1,dt*3);if(camOn&&noseLift0!=null&&noseLift!=null&&performance.now()-poseSeen<400&&noseLift<noseLift0-.15)doBow();else if(bowT>6)doBow()}
+  if(bowStep==='bowing'){const c=CC[ccTier];bowAmt=bowT<.7?bowT/.7:bowT<1.4?1:Math.max(0,1-(bowT-1.4)/.7);if(ccTier===0)ovation=Math.min(1,ovation+dt*1.2);
+    clap=c.clap*Math.min(1,Math.max(clap/c.clap,bowT*2))*(ccTier===0&&bowN<2?1:Math.max(0,1-(bowT-3.4)/1));
+    if(bowT>4.4){if(ccTier===0&&bowN<2){bowStep='bow';bowT=0;noseLift0=noseLift;applause(5,.7);cue(camOn?'앙코르! 한 번 더 인사하세요 · 고개를 숙이거나 오른손을 내리세요':'앙코르! 한 번 더 인사하세요 · Enter','CURTAIN CALL')}else{bowStep=null;clap=0;finish()}}}
 }
+/* ---- climate threat: rises through the song and with poor conducting; each nature solo (FOCUS window)
+   conducted well pushes it back. Drawn as the top meter, a screen haze, a canvas filter and particle changes ---- */
+const THREAT={spring:{name:'이른 더위',icon:'🌡️',obj:'이른 더위를',col:'255,140,60',bar:'#ff9a3c'},
+  summer:{name:'폭염',icon:'☀️',obj:'폭염을',col:'255,228,150',bar:'#ffb020'},
+  autumn:{name:'가뭄',icon:'🏜️',obj:'가뭄을',col:'190,135,55',bar:'#c9903a'},
+  winter:{name:'녹는 눈',icon:'💧',obj:'따뜻한 바람을',col:'110,125,135',bar:'#8fb3c9'}};
+const NICON={wind:'🌬️',birds:'🐦',stream:'💧',storm:'⛈️',sun:'☀️'};
+let threat=0,tPush=0,saves=0,fwin=null,natureMsg=null,hazeK=null,filtK=null,cicAt=0;
+function updateThreat(dt){const TH=THREAT[SEASON.key];if(!TH)return;const prog=Math.min(1,pos/(TOTAL_BARS*BPB));
+  tPush=Math.max(0,tPush-dt*.01);
+  /* summer: cicadas sing while the heat is high */
+  if(SEASON.key==='summer'&&threat>.45&&performance.now()>cicAt){cicAt=performance.now()+3200;play({kind:'cicada',part:'sun',dur:3.5,vol:.01+.02*threat},ac.currentTime,1)}
+  const tgt=Math.max(.05,Math.min(1,.25+prog*.4+Math.max(0,.6-health)*1.2-Math.max(0,health-.6)*.3-tPush));/* creeps up even when playing well, so the pushes read as drops */threat+=(tgt-threat)*Math.min(1,dt*1.5);
+  const f=directorFocus();
+  if(f&&fwin!==f){fwin=f;f.hits=0;f.miss=0;natureMsg={key:f.key,t:performance.now(),html:`${NICON[f.key]||'🎵'} ${SEASON.names[f.key]} 차례!<small>박자를 맞추면 ${TH.obj} 밀어내요</small>`,win:false}}
+  if(!f&&fwin){const w=fwin;fwin=null;
+    if(w.hits>=3&&w.hits>w.miss*2){tPush+=.3;saves++;health=Math.min(1,health+.05);PARTS[PI[w.key]].pulse=1;flash=Math.max(flash,.35);burst(30);pushSound();
+      natureMsg={key:w.key,t:performance.now(),html:`${NICON[w.key]||'🎵'} ${SEASON.names[w.key]}의 소리가<br>${TH.obj} 밀어냈어요!`,win:true}}
+    else natureMsg={key:w.key,t:performance.now(),html:`${SEASON.names[w.key]}의 소리가 묻혀 버렸어요<small>${TH.name} 위협이 더 번져요</small>`,win:false}}}
+function pushSound(){const t=ac.currentTime,sN=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();sN.buffer=noiseBuf;f.type='bandpass';f.Q.value=1.2;f.frequency.setValueAtTime(300,t);f.frequency.exponentialRampToValueAtTime(3200,t+.7);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.22,t+.15);g.gain.linearRampToValueAtTime(0,t+.9);sN.connect(f);f.connect(g);g.connect(master);sN.start(t);sN.stop(t+1);
+  [72,76,79,84].forEach((m,i)=>osc('sine',mtof(m),t+.25+i*.08,.3,.04,master,{attack:.005,release:.5}))}/* a gust and a rising chime */
+function drawThreat(){const TH=THREAT[SEASON.key],on=!!TH&&!REH.on&&(state==='play'||state==='ready'),el=$('threat'),hz=$('haze'),gl=$('gl');el.hidden=!on;
+  const lv=on?Math.round(threat*100):0;
+  if(on){el.querySelector('span').textContent=TH.icon;el.querySelector('b').textContent=TH.name;el.querySelector('u').style.width=lv+'%';el.querySelector('u').style.background=TH.bar;el.querySelector('em').textContent=lv+'%';el.classList.toggle('hot',lv>=60)}
+  const hk=on?SEASON.key+Math.round(threat*40):'';if(hk!==hazeK){hazeK=hk;
+    if(on){const c=TH.col,a=SEASON.key==='winter'?.5:.6;hz.style.background=`radial-gradient(ellipse 120% 80% at 50% ${SEASON.key==='autumn'?'100%':'0%'},rgba(${c},${a}) 0%,rgba(${c},${a*.35}) 45%,rgba(${c},0) 80%)`;hz.style.opacity=(threat*.9).toFixed(2);hz.classList.toggle('beat',SEASON.key!=='winter')}else hz.style.opacity=0}
+  const t=on?threat:0,fk=SEASON.key+Math.round(t*20);if(fk!==filtK){filtK=fk;const k=SEASON.key;
+    gl.style.filter=t<.05?'':k==='autumn'?`saturate(${(1-t*.55).toFixed(2)}) sepia(${(t*.45).toFixed(2)})`:k==='winter'?`saturate(${(1-t*.5).toFixed(2)}) brightness(${(1-t*.12).toFixed(2)})`:k==='summer'?`brightness(${(1+t*.3).toFixed(2)}) saturate(${(1-t*.35).toFixed(2)}) contrast(${(1-t*.12).toFixed(2)})`:`saturate(${(1+t*.25).toFixed(2)}) hue-rotate(${(-t*12).toFixed(0)}deg)`}
+  const n=$('nature');if(natureMsg&&performance.now()-natureMsg.t<2800){if(n.dataset.k!==natureMsg.t+''){n.dataset.k=natureMsg.t;n.innerHTML=natureMsg.html;n.classList.toggle('win',natureMsg.win)}
+    const p=PARTS[PI[natureMsg.key]],a=p&&project([p.center[0],3.5,p.center[2]]);if(a&&a.x>-100&&a.x<innerWidth+100){const hw=n.offsetWidth/2+12;n.style.left=Math.max(hw,Math.min(innerWidth-hw,a.x))+'px';n.style.top=Math.max(n.offsetHeight+70,a.y)+'px'}else{n.style.left='50%';n.style.top='34%'}n.classList.add('on')}else n.classList.remove('on')}
+/* ---- finale: all four seasons kept. The curtain opens and the backdrop walks through the year to a fanfare
+   and applause, then the honorary conductor certificate ---- */
+const YEAR=['spring','summer','autumn','winter'];let fin=null;
+function fanfare(t0,up){[[60,64,67,72],[65,69,72,77],[67,71,74,79],[72,76,79,84]].forEach((c,i)=>{const t=t0+i*.55,d=i===3?2.2:.45;c.forEach(m=>osc('sawtooth',mtof(m+(up||0)),t,d,.022,master,{attack:.03,release:.4,cutoff:2400,vib:i===3?3:0}))});
+  [0,.55,1.1].forEach(d=>noiseHit(t0+d,.3,.35,master,90));for(let i=0;i<14;i++)noiseHit(t0+1.65+i*.04,.08,.12+i*.01,master,90)}/* brass I–IV–V–I with a timpani roll */
+function beginFinale(){if(!ac)initAudio();ac.resume();[master,musicBus,ambGain].forEach(g=>g.gain.cancelScheduledValues(ac.currentTime));master.gain.setValueAtTime(.8,ac.currentTime);ambGain.gain.setValueAtTime(0,ac.currentTime);
+  $('result').hidden=true;$('intro').hidden=true;$('cert').hidden=true;preShow=false;state='finale';yawLocked=true;yawTarget=yaw=0;bowStep=null;bowAmt=0;
+  fin={t:0,i:0};applySeason('spring');health=1;showChapter('사계 완성','THE FOUR SEASONS · 네 계절을 모두 지켰어요');fanfare(ac.currentTime+.4);applause(9,1.2);bravos(12);cue('봄을 지켜냈어요','사계 완성')}
+function updateFinale(dt){if(state!=='finale'||!fin)return;fin.t+=dt;clap=Math.min(1,fin.t);
+  const i=Math.min(3,Math.floor(fin.t/3.4));if(i!==fin.i){fin.i=i;applySeason(YEAR[i]);health=1;burst(60);flash=.4;PARTS.forEach(p=>p.pulse=1);fanfare(ac.currentTime,[0,2,4,5][i]);cue(SEASONS[YEAR[i]].name+'을 지켜냈어요','사계 완성')}
+  if(fin.t>14.5&&$('cert').hidden)showCert()}
+function showCert(){const st=loadStamps(),d=new Date();cue('');
+  $('certBody').innerHTML=`위 지휘자는 ${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 사계 홀에서<br>안토니오 비발디 「사계」를 지휘하여<br>바람·새·시냇물·천둥·햇살의 소리로<br><b>봄, 여름, 가을, 겨울</b>을 모두 지켜 냈으므로<br>이 증서를 드립니다.`;
+  $('certStamps').innerHTML=YEAR.map(k=>`<span class="${st[k]!=null&&st[k]<=1?'ok':''}">${SEASONS[k].name}</span>`).join('');$('cert').hidden=false}
+$('finaleBtn').addEventListener('click',beginFinale);$('finaleBtn2').addEventListener('click',beginFinale);$('certAgain').addEventListener('click',beginFinale);
+$('certBack').addEventListener('click',()=>{$('cert').hidden=true;backToSeasons()});
+/* ---- chapter stamp: a big title slammed onto the screen between the parts of the night ---- */
+function showChapter(big,small){const c=$('chapter');c.innerHTML=`<div><b>${big}</b><small>${small||''}</small></div>`;c.classList.remove('on');void c.offsetWidth;c.classList.add('on');
+  if(ac){const t=ac.currentTime+.3;noiseHit(t,.35,.5,master,110);osc('sine',60,t,.2,.3,master,{attack:.003,release:.35,cutoff:400})}}
+/* ---- preshow: the house murmurs, lights go down, the oboe gives the A and the orchestra tunes,
+   the conductor walks on from the wing to applause, bows to the audience, turns round and raises both hands ---- */
+let cueText=null;function cue(t,who){const k=(who||'')+t;if(k===cueText)return;cueText=k;const c=$('cue');c.classList.toggle('on',!!t);if(t)c.innerHTML=(who?`<small>${who}</small>`:'')+t}
+let ps=null,camX=0,camZ=0,psDim=1;const PS_WING=[-3.2,-.4];
+function beginPreshow(){state='preshow';ps={step:'murmur',t:0};yawLocked=true;yaw=yawTarget=150*D2R;camX=PS_WING[0];camZ=PS_WING[1];psDim=.9;clap=0;bowAmt=0;
+  musicBus.gain.cancelScheduledValues(ac.currentTime);musicBus.gain.setValueAtTime(.9,ac.currentTime);
+  ambFilter.type='bandpass';ambFilter.frequency.value=520;ambFilter.Q.value=.6;ambGain.gain.cancelScheduledValues(ac.currentTime);ambGain.gain.setTargetAtTime(.1,ac.currentTime,.4);
+  showChapter('본공연',`TONIGHT · 비발디 「사계」 ${SEASON.name}`);cue('관객들이 자리를 채우고 있어요…','무대 뒤')}
+function psStep(s){if(!ps)return;ps.step=s;ps.t=0;
+  if(s==='dim'){psDim=.28;ambGain.gain.setTargetAtTime(.02,ac.currentTime,.6);cue('객석 조명이 꺼져요 · 쉿…')}
+  if(s==='tune'){yawTarget=35*D2R;tuneUp();cue('오보에가 라(A)음을 주면 단원들이 음을 맞춰요')}
+  if(s==='enter'){yawTarget=Math.PI;psDim=.85;applause(5.5);cue('지휘자 입장! 박수가 쏟아져요')}
+  if(s==='bow'){noseLift0=noseLift;cue(camOn?'관객에게 인사하세요 · 고개를 숙이거나 오른손을 내리세요':'관객에게 인사하세요 · Enter')}
+  if(s==='bowing')applause(2.6);
+  if(s==='turnback'){yawTarget=0;cue('이제 오케스트라 쪽으로 돌아서요')}
+  if(s==='raise'){psDim=1;cue(camOn?'두 손을 머리 위로 들어 준비해요 🙌':'두 손을 들어 준비해요 🙌 · B 또는 Enter')}
+  if(s==='hush'){flash=.25;cue('…')}}
+function tuneUp(){const t0=ac.currentTime,ks=PARTS.map(p=>p.key),dst=i=>partGain[ks[i%ks.length]]||musicBus;
+  osc('sawtooth',440,t0,2.4,.045,dst(0),{attack:.25,release:.6,cutoff:1700,vib:1.5});/* the oboe's A */
+  [196,293.7,440,659.3,440,220,110,293.7,440,659.3,146.8,440].forEach((f,i)=>{const t=t0+1.7+Math.random()*1.4,d=1.6+Math.random()*1.6,
+    o=osc(i%3?'sawtooth':'triangle',f,t,d,.014,dst(i),{attack:.2,release:.5,cutoff:2200,vib:2});o.detune.setValueAtTime((Math.random()-.5)*90,t);o.detune.linearRampToValueAtTime(0,t+d*.7)});
+  for(let i=0;i<12;i++){const t=t0+2.2+Math.random()*2.6;osc('triangle',mtof(62+Math.floor(Math.random()*16)),t,.12,.012,dst(i),{attack:.01,release:.12,cutoff:2600})}}/* quick runs: players warming up */
+function babble(){const t=ac.currentTime,f=110+Math.random()*130,o=osc('sawtooth',f,t,.12+Math.random()*.3,.004+Math.random()*.004,master,{attack:.04,release:.12,cutoff:650});o.frequency.linearRampToValueAtTime(f*(.85+Math.random()*.3),t+.3)}
+function updatePreshow(dt){if(state!=='preshow'||!ps)return;ps.t+=dt;const t=ps.t,s=ps.step;
+  if(s==='murmur'){if(Math.random()<dt*12)babble();if(t>3.2)psStep('dim')}
+  else if(s==='dim'){if(Math.random()<dt*Math.max(0,3-t*3))babble();if(t>1.8)psStep('tune')}
+  else if(s==='tune'){if(t>5.4)psStep('enter')}
+  else if(s==='enter'){const k=Math.min(1,t/2.6),e=k*k*(3-2*k);camX=PS_WING[0]*(1-e);camZ=PS_WING[1]*(1-e);clap=Math.min(1,t*2)*Math.max(.3,1-t/6);if(t>3.2)psStep('bow')}
+  else if(s==='bow'){clap+=(.25-clap)*Math.min(1,dt);if(noseLift0==null)noseLift0=noseLift;
+    if(camOn&&noseLift0!=null&&noseLift!=null&&performance.now()-poseSeen<400&&noseLift<noseLift0-.15)psStep('bowing');else if(t>8)psStep('bowing')}
+  else if(s==='bowing'){bowAmt=t<.7?t/.7:t<1.4?1:Math.max(0,1-(t-1.4)/.7);clap=Math.min(1,.25+t*2)*Math.max(0,1-(t-2.2)/.8);if(t>2.4){bowAmt=0;psStep('turnback')}}
+  else if(s==='turnback'){clap=Math.max(0,clap-dt);ambGain.gain.setTargetAtTime(0,ac.currentTime,.3);if(t>1.8)psStep('raise')}
+  else if(s==='hush'){if(t>1)psReady()}}
+function psGesture(g){if(!ps)return;if(ps.step==='bow'&&(g==='beat'||g==='accent'))psStep('bowing');else if(ps.step==='raise'&&g==='both')psStep('hush')}
+function psKey(){if(!ps)return;const s=ps.step;if(s==='murmur'||s==='dim'||s==='tune')psStep('enter');else if(s==='bow')psStep('bowing');else if(s==='raise')psStep('hush')}
+function psReady(){ps=null;state='ready';rh.phase=null;rh.skipUntil=0;bowAmt=0;clap=0;camX=camZ=0;yawLocked=false;yawTarget=0;psDim=1;ambGain.gain.setTargetAtTime(0,ac.currentTime,.2);cue('')}
+$('skipBtn').addEventListener('click',()=>{$('skipBtn').blur();if(state==='preshow')psReady()});
 
 /* =========================================================
    7. main loop
    ========================================================= */
-function resize(){const d=Math.min(devicePixelRatio||1,1.25);canvas.width=innerWidth*d;canvas.height=innerHeight*d;gl.viewport(0,0,canvas.width,canvas.height)}
+function resize(){const d=Math.min(devicePixelRatio||1,1.25);renderer.setPixelRatio(d);renderer.setSize(innerWidth,innerHeight,false);composer.setPixelRatio(d);composer.setSize(innerWidth,innerHeight)}
 window.addEventListener('resize',resize);resize();
 reset();
 function loop(ts){
   const dt=Math.max(0,Math.min(.05,(ts-(lastFrame||ts))/1000));lastFrame=Math.max(ts,lastFrame);
+  if(!$('intro').hidden){mainRP.scene=grScene;ovPass.enabled=false;document.body.classList.add('inroom');updateGreenRoom(dt,ts);composer.render();updateCalib(dt);drawCamOverlay();requestAnimationFrame(loop);return}
+  if(mainRP.scene!==scene){mainRP.scene=scene;ovPass.enabled=true;document.body.classList.remove('inroom');$('grTip').style.display='none';canvas.style.cursor=''}
   if(!yawLocked&&!(calibOn&&calibStep===2)){const L=keysDown.KeyA||keysDown.ArrowLeft,R=keysDown.KeyD||keysDown.ArrowRight;if(L)yawTarget=Math.max(-YAW_MAX,yawTarget-80*D2R*dt);if(R)yawTarget=Math.min(YAW_MAX,yawTarget+80*D2R*dt)}
   /* camera director: when a nature sound enters, the view glides to it, then back to spring behind the curtain */
   {const f=directorFocus(),k=Math.min(1,dt*(f?1.6:1.1));
     if(state==='play'&&!yawLocked&&!(keysDown.KeyA||keysDown.KeyD||keysDown.ArrowLeft||keysDown.ArrowRight))yawTarget=(f?f.yaw:0)*D2R;
     camPitch+=((f?f.pitch:CAM.pitch)-camPitch)*k;camFov+=((f?f.fov:58)-camFov)*k;
     if(f&&f.key!==lastFocus&&state==='play')PARTS[PI[f.key]].pulse=1;lastFocus=f?f.key:null}
-  yaw+=(yawTarget-yaw)*Math.min(1,dt*(state==='play'?2.2:7));
+  yaw+=(yawTarget-yaw)*Math.min(1,dt*(state==='play'?2.2:state==='preshow'?1.5:7));
   gaze=camOn&&!yawLocked?'C':zoneFromDeg(yaw/D2R,gaze);
   updateListener();
   if((state==='ready'||state==='play')&&!paused){
     const now=performance.now(),cb=conductorBPM(),iv=beats.length>1?beats[beats.length-1]-beats[beats.length-2]:700;
     const conducting=!!cb&&now-lastBeatAt<Math.max(900,iv*1.7),refT=targetAt(pos);
-    if(state==='ready'&&conducting&&beats.length>=2&&!(REH.on&&REH.pause)){state='play';bpm=refT;audioPos=pos;audioTime=ac.currentTime;toast(SECTIONS[0].label)}
+    if(state==='ready'&&beats.length>=1&&now-lastBeatAt<1500&&!(REH.on&&REH.pause)){/* one stroke is enough: the tempo comes from the score */state='play';bpm=refT;audioPos=pos;audioTime=ac.currentTime;toast(SECTIONS[0].label)}
     {const stopped=state==='play'&&now-lastBeatAt>2500;if(stopped&&!cbHold)stops++;cbHold=stopped}
     const playing=state==='play';
     if(playing){
       bpm+=(refT-bpm)*Math.min(1,dt*4);
       bpm=Math.max(40,Math.min(200,bpm));conductTime+=dt;
-      audioPos=pos;audioTime=ac.currentTime;if(!(REH.on&&REH.pause)){pos+=dt/secPerBeat()*fermataNow;schedule()}
+      /* the audio clock drives the beat: frame time is clamped and drops time on slow (webcam) frames, notes already queued don't */
+      {const adt=Math.min(.25,Math.max(0,ac.currentTime-audioTime)),hold=REH.on&&REH.pause;if(!hold)pos+=adt/secPerBeat()*fermataNow;audioPos=pos;audioTime=ac.currentTime;if(!hold)schedule()}
     }
     const handFresh=camOn&&performance.now()-volAt<1500&&vol!=null;
     if(REH.on)rehTick(dt,now);
@@ -1359,11 +1793,12 @@ function loop(ts){
       ambGain.gain.setTargetAtTime(a?a.vol:0,ac.currentTime,.4)}/* the season's background: rain hiss, autumn breeze, winter wind */
     if(playing){const sec=secAt(pos);
       if(sec&&sec.label&&!REH.on)toast(sec.label)}
+    if(playing&&!REH.on)updateThreat(dt);
     if(state==='ready')toast(REH.on?'오른손을 위아래로 저어 보세요 · 저을 때마다 소리가 나요':`오른손으로 박자를 저으면 커튼이 열리고 ${SEASON.name}이 시작돼요`);
     if(pos>=TOTAL_BARS*BPB+1){if(REH.on)endRehearsal();else beginBow()}
   }
   /* particles */
-  const stormSec=state==='play'&&SECTIONS.some(s=>(s.rain||(SEASON.key==='spring'&&s.type==='storm'))&&pos>=s.from*BPB&&pos<s.to*BPB),rainAmt=stormSec?.5:0,W=windNow();
+  const stormSec=state==='play'&&SECTIONS.some(s=>(s.rain||(SEASON.key==='spring'&&s.type==='storm'))&&pos>=s.from*BPB&&pos<s.to*BPB),rainAmt=stormSec?.5*(SEASON.key==='summer'?Math.max(.25,1.3-threat):1):0,W=windNow();
   const sc=PARTS[3].center,storm=stormSec&&(SEASON.key==='summer'||SEASON.key==='spring');
   if(storm){/* wind-driven rain over the whole stage (summer, and spring's thunderstorm); summer also gets lightning every few seconds */
     for(let i=0;i<(SEASON.key==='summer'?35:25);i++)drops.push({x:-8-W*2+Math.random()*15,y:6+Math.random()*2.5,z:-10+Math.random()*11,v:11+Math.random()*4,s:W*.12});
@@ -1371,46 +1806,53 @@ function loop(ts){
   else for(let i=0;i<Math.round(rainAmt*14);i++)drops.push({x:sc[0]+(Math.random()-.5)*6,y:6+Math.random()*2,z:sc[2]+(Math.random()-.5)*6,v:9+Math.random()*4,s:-.02});
   drops=drops.filter(d=>{d.y-=d.v*dt;d.x+=d.s*d.v*dt;return d.y>0});
   const rp=[],rc=[];drops.forEach(d=>{rp.push(d.x,d.y,d.z,d.x-d.s*2.2,d.y+.35,d.z);rc.push(.6,.72,.95,.6,.72,.95)});fillDyn(rainBuf,rp,rc);
-  {const r=petals.length>3000?0:SEASON.fx.rate();let n=r;while(n>0){/* capped so a slow computer never drowns in snow */if(Math.random()<Math.min(1,n))spawnFx(false);n-=1}}
+  {const r=petals.length>3000?0:SEASON.fx.rate()*(state!=='play'?1:SEASON.key==='winter'?1-threat*.6:SEASON.key==='autumn'?1+threat*1.2:1);let n=r;while(n>0){/* capped so a slow computer never drowns in snow */if(Math.random()<Math.min(1,n))spawnFx(false);n-=1}}
   {const sw=SEASON.fx.sway||.3;petals=petals.filter(p=>{p.x+=(p.vx+W+Math.sin(ts/600+p.ph)*sw)*dt;p.y-=p.vy*(1+W*.08)*dt;return p.y>0&&p.x<12})}
   const pp=[],pc=[],np=[],nc=[];petals.forEach(p=>{if(p.big){np.push(p.x,p.y,p.z);nc.push(...p.c)}else{pp.push(p.x,p.y,p.z);pc.push(...p.c)}});fillDyn(petalBuf,pp,pc);fillDyn(nearBuf,np,nc);heat=Math.max(0,heat-dt*.02);
   flash=Math.max(0,flash-dt*3);
 
   /* render */
   if(window.__noRender){updateBow(dt);updateCalib(dt);requestAnimationFrame(loop);return}
-  const asp=innerWidth/innerHeight,proj=M4.persp((asp<1?78:camFov)*D2R,asp,.1,60);
-  updateBow(dt);
-  const eye=[0,CAM.y-bowAmt*.25,CAM.z],pitch=(camPitch-bowAmt*38)*D2R,fwd=[Math.sin(yaw)*Math.cos(pitch),Math.sin(pitch),-Math.cos(yaw)*Math.cos(pitch)];
-  const view=M4.look(eye,[eye[0]+fwd[0],eye[1]+fwd[1],eye[2]+fwd[2]],[0,1,0]);PV=M4.mul(proj,view);
-  gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-  gl.uniformMatrix4fv(U.uProj,false,proj);gl.uniformMatrix4fv(U.uView,false,view);dimNow+=((REH.on||preShow||SEASON.key==='rehearsal'?.42:1)-dimNow)*.05;gl.uniform3fv(U.uFog,[.1*dimNow,.075*dimNow,.06*dimNow]);gl.uniform1f(U.uFlash,flash);
+  const asp=innerWidth/innerHeight;ALL.forEach(m=>m.visible=false);camera.fov=asp<1?78:camFov;camera.aspect=asp;camera.updateProjectionMatrix();
+  /* quality guard: measured on real time, skipped while the tab is hidden */
+  if(document.hidden||!qT0)qT0=ts,qN=0;else if(++qN,ts-qT0>3000){const f=qN*1000/(ts-qT0);qT0=ts;qN=0;if(f<28&&quality>0)setQuality(quality-1)}
+  updateBow(dt);updatePreshow(dt);updateFinale(dt);
+  const eye=[camX,CAM.y-bowAmt*.25,CAM.z+camZ],pitch=(camPitch-bowAmt*38)*D2R,fwd=[Math.sin(yaw)*Math.cos(pitch),Math.sin(pitch),-Math.cos(yaw)*Math.cos(pitch)];
+  camera.position.set(...eye);camera.lookAt(eye[0]+fwd[0],eye[1]+fwd[1],eye[2]+fwd[2]);camera.updateMatrixWorld();PV=new Float32Array(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse).elements);
+  dimNow+=((state==='preshow'?psDim:REH.on||preShow||SEASON.key==='rehearsal'?.42:1)-dimNow)*.05;scene.fog.color.setRGB(.1*dimNow,.075*dimNow,.06*dimNow,SRGB);flashL.intensity=flash*4;spots.forEach((s,i)=>s.intensity=SPOT[i?1:0]*(.35+.65*dimNow));
   drawMesh(hall,M4.id());drawMesh(stageFrame,M4.id());
-  {const tgt=state==='play'&&!REH.on&&SEASON.key!=='rehearsal'?1:0;curtain+=(tgt-curtain)*Math.min(1,dt*(tgt?.9:1.4));
-    if(curtain>.02){{const w=Math.max(0,(.6-health)/.6);
-        if(SEASON.key==='summer')drawMesh(backdrop,M4.id(),{nodim:true,mul:[1-.3*w,1-.3*w,1-.25*w]});/* the storm only gets darker, never brown */
+  {const tgt=(state==='play'||state==='finale')&&!REH.on&&SEASON.key!=='rehearsal'?1:0;curtain+=(tgt-curtain)*Math.min(1,dt*(tgt?.9:1.4));
+    if(curtain>.02){animBackdrop(backdrop,ts/1000);{const w=Math.max(0,(.6-health)/.6);
+        if(SEASON.key==='summer'){const h=threat;drawMesh(backdrop,M4.id(),{nodim:true,mul:[.75+.75*h,.72+.68*h,.7+.4*h],tint:[.25*h,.18*h,.05*h]})}/* summer: the heat bleaches the stage; driving it off brings back the dark storm */
         else drawMesh(backdrop,M4.id(),{nodim:true,mul:[1-.2*w,1-.45*w-heat*.15,1-.55*w-heat*.25],tint:[.12*w+heat*.12,.04*w,0]})}
-      if(SEASON.key==='spring'){const w=Math.max(0,(.6-health)/.6),n=Math.round(health*BLOOMS.length),O=[3,11,7,15,0,19,9,5,13,1,17,8,2,14,6,18,10,4,12,16];
+      const GB=backdrop.userData.blooms;
+      if(GB&&GB.length){const n=Math.round(health*GB.length);GB.forEach((e,r)=>{e.v+=((r<n?1:0)-e.v)*Math.min(1,dt*4);e.o.scale.copy(e.s).multiplyScalar(Math.max(.001,e.v));e.o.visible=e.v>.02})}/* Blender blossoms open with health */
+      else if(SEASON.key==='spring'){const w=Math.max(0,(.6-health)/.6),n=Math.round(health*BLOOMS.length),O=[3,11,7,15,0,19,9,5,13,1,17,8,2,14,6,18,10,4,12,16];
         O.forEach((i,r)=>{const b=BLOOMS[i];if(!b)return;b.s+=((r<n?1:0)-b.s)*Math.min(1,dt*4);if(b.s>.02)drawMesh(b.mesh,M4.chain(M4.T(...b.p),M4.S(b.s,b.s,b.s)),{nodim:true,mul:[1,1-.2*w,1-.2*w]})})}
-      if(SEASON.key==='summer'&&flash>.2)drawMesh(boltMesh,M4.id(),{unlit:1,nodim:true});
-      const sp=PARTS[PI.sun];if(SEASON.key!=='rehearsal'&&SEASON.key!=='summer')drawMesh(sunMesh,M4.T(0,Math.sin(ts/900)*.05,0),{unlit:.6+.4*Math.min(1,sp.pulse),mul:[1,1,.9+.2*sp.pulse]})}
+      if(SEASON.key==='summer'&&flash>.2)drawMesh(boltMesh,M4.id(),{unlit:1,glow:4,nodim:true});
+      const sp=PARTS[PI.sun];if(SEASON.key==='summer'&&threat>.12){const z=ST.zB+.12,k=.6+threat*1.1;drawMesh(sunMesh,M4.chain(M4.T(4.6,4.5,z),M4.S(k,k,1),M4.T(-4.6,-4.5,-z)),{unlit:1,glow:1.2+threat*2.2,mul:[1.2,1.1,.8]})}/* the blazing sun grows with the heatwave */
+      if(SEASON.key!=='rehearsal'&&SEASON.key!=='summer')drawMesh(sunMesh,M4.T(0,Math.sin(ts/900)*.05,0),{unlit:1,glow:1.1+1.4*Math.min(1,sp.pulse)+threat*1.6,mul:[1,1-.35*threat,.9+.2*sp.pulse-.5*threat]})}
     const k=1-.86*curtain,sw=Math.sin(ts/700)*.02*curtain;
     drawMesh(curL,M4.chain(M4.T(-ST.X,0,ST.zC),M4.S(k,1,1),M4.Rz(sw)));drawMesh(curR,M4.chain(M4.T(ST.X,0,ST.zC),M4.S(k,1,1),M4.Rz(-sw)))}
-  audience.forEach(a=>drawMesh(a.mesh,M4.T(0,a.row<0?0:Math.max(0,Math.sin(ts/90+a.row*1.7))*.05*clap,0)));
+  audience.forEach(a=>drawMesh(a.mesh,M4.T(0,a.row<0?0:ovation*.12+Math.max(0,Math.sin(ts/90+a.row*1.7))*(.05+.07*ovation)*clap,0)));/* standing ovation lifts and bounces the rows */
   PARTS.forEach(p=>p.pulse=Math.max(0,p.pulse-dt*5));
   const t=ts/1000;
   actors.forEach(a=>{
     const p=a.part?PARTS[PI[a.part]]:null,pl=p?p.pulse:PARTS[0].pulse*.5;
-    const bob=(state==='play'?Math.sin(t*bpm/60*Math.PI+a.phase)*.012:0)+pl*.025;
+    const bob=((state==='play'?Math.sin(t*bpm/60*Math.PI+a.phase)*.012:0)+pl*.025)*(a.mix?.5:1);
+    const hp=hearPos();
+    if(a.mix){const on=state==='play'&&!paused?.35+.65*Math.min(1,pl):0;if(a.play){a.play.weight=on;a.play.time=((hp%1)+1)%1*a.play.getClip().duration}if(a.idle)a.idle.weight=1-on;a.mix.update(dt)}
     const tint=p&&looks(p.key)?[.06,.05,.02]:[0,0,0];
-    drawMesh(a.mesh,M4.chain(M4.T(a.x,a.y+bob,a.z),M4.Ry(a.ry),M4.Rz(Math.sin(t*2+a.phase)*pl*.04)),{tint});
+    drawMesh(a.mesh,M4.chain(M4.T(a.x,a.y+bob,a.z),M4.Ry(a.ry),M4.Rz(Math.sin(t*2+a.phase)*pl*(a.mix?.02:.04))),{tint});
   });
-  PARTS.forEach(p=>{if(looks(p.key))drawMesh(p.ring,M4.id(),{mul:[.95,.9,.7],unlit:1})});
+  PARTS.forEach(p=>{if(looks(p.key))drawMesh(p.ring,M4.id(),{mul:[.95,.9,.7],unlit:1,glow:1.8})});
   if(rainBuf.count)drawMesh(rainBuf,M4.id(),{unlit:1,mode:gl.LINES});
-  if(SEASON.key==='rehearsal'){const pp=[],pc=[];HALL_STARS.forEach(([x,y,z],i)=>{const k=.45+.55*Math.max(0,Math.sin(ts/(300+i*29)+i*1.7));pp.push(x,y,z);pc.push(k,k*.95,k*.75)});fillDyn(starBuf,pp,pc);drawMesh(starBuf,M4.id(),{unlit:1,mode:gl.POINTS,point:7})}
+  if(SEASON.key==='rehearsal'){const pp=[],pc=[];HALL_STARS.forEach(([x,y,z],i)=>{const k=.45+.55*Math.max(0,Math.sin(ts/(300+i*29)+i*1.7));pp.push(x,y,z);pc.push(k,k*.95,k*.75)});fillDyn(starBuf,pp,pc);drawMesh(starBuf,M4.id(),{unlit:1,glow:2.4,mode:gl.POINTS,point:9})}
   if(petalBuf.count)drawMesh(petalBuf,M4.id(),{unlit:1,mode:gl.POINTS,point:SEASON.fx.size});
   if(nearBuf.count)drawMesh(nearBuf,M4.id(),{unlit:1,mode:gl.POINTS,point:SEASON.fx.size*2.6});
-  if(camOn){const now=performance.now(),fy=(asp<1?78:58)*D2R;gl.clear(gl.DEPTH_BUFFER_BIT);gl.uniformMatrix4fv(U.uView,false,M4.id());
+  if(camOn){const now=performance.now(),fy=(asp<1?78:58)*D2R;ovCam.fov=camera.fov;ovCam.aspect=asp;ovCam.updateProjectionMatrix();
     if(rightPts&&now-handSeen<350)drawMitten(fy,asp,rightPts,true);if(leftPts&&now-leftSeen<350)drawMitten(fy,asp,leftPts,false)}
+  composer.render();
   updateCalib(dt);
 
   /* labels */
@@ -1419,14 +1861,14 @@ function loop(ts){
     if(b){va.style.left=b.x+'px';va.style.top=b.y+'px'}va.style.opacity=b&&!preShow&&SEASON.key!=='rehearsal'?1:0}
   PARTS.forEach(p=>{const s=project([p.center[0],p.center[1]+({storm:2.2,birds:2.6,stream:1.15,wind:1.95,sun:2.5})[p.key],p.center[2]]);
     if(!s||s.x<-80||s.x>innerWidth+80){p.lab.style.opacity=0;return}p.lab.style.opacity=preShow&&!REH.on?0:.15+.85*curtain;p.lab.style.left=s.x+'px';p.lab.style.top=s.y+'px';p.lab.classList.toggle('look',looks(p.key))});
-  $('stand').style.display=state==='bow'||state==='done'||calibOn?'none':'';$('pauseBtn').hidden=!(state==='ready'||state==='play');$('seasonBtn').hidden=state==='idle'&&!calibOn;$('toast').style.visibility=calibOn?'hidden':'';
-  drawCamOverlay();drawRehGuide();
+  $('stand').style.display=state==='bow'||state==='done'||state==='preshow'||state==='finale'||calibOn?'none':'';$('skipBtn').hidden=state!=='preshow';{const gr=!$('intro').hidden&&!calibOn;$('ctrlBar').style.visibility=gr||(state==='done'&&!$('result').hidden)||!$('cert').hidden?'hidden':'';document.querySelector('.hud').style.visibility=gr?'hidden':''}$('pauseBtn').hidden=!(state==='ready'||state==='play');$('seasonBtn').hidden=state==='idle'&&!calibOn;$('toast').style.visibility=calibOn?'hidden':'';
+  drawThreat();drawCamOverlay();drawRehGuide();
   drawStand();drawFx(dt);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
 if(location.hash==='#debug')window.dbg={x:c=>eval(c),look:d=>{yawTarget=yaw=d*D2R},jump:b=>{pos=b},st:()=>state,pose:r=>{camOn=true;onPose(r)},calibStep:()=>({calibOn,calibStep,LC,beatAmp:TUNE.beatAmp,lcStage}),forceCalib:()=>{camOn=true;openCalib()},head:()=>({yawTarget:Math.round(yawTarget/D2R),yaw:Math.round(yaw/D2R),gaze}),g:()=>({rh:{vy:+rh.vy.toFixed(2),amps:rh.amps.length,sw:shoulderW},gStats,vol,leftH,holding:rh.holding,smooth:rh.smooth,acc:accState.map(a=>a.hit),state,pos:Math.round(pos*10)/10}),s:()=>({pos,state,bpm}),setBase:()=>{baseAmp=.33;TUNE.beatAmp=.08}};
-applySeason('spring');
+applySeason('spring');showGreenRoom();
 })();
 </script>
 </body>
